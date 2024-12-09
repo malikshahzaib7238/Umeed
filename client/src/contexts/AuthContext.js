@@ -12,8 +12,10 @@ export function useAuth() {
 // export the provider (handle all the logic here)
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
+  const [user, setUser] = useState(null);
   const [account, setAccount] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('token') || null)
+
 
   const register = (formData = {}) =>
     new Promise((resolve, reject) => {
@@ -50,6 +52,7 @@ export function AuthProvider({ children }) {
           setToken(accessToken)
           setIsLoggedIn(true)
           resolve(true)
+          setUser(user)
         })
         .catch((error) => {
           console.error(error)
@@ -61,6 +64,10 @@ export function AuthProvider({ children }) {
     setIsLoggedIn(false)
     setAccount(null)
     setToken(null)
+    setUser(null)
+    const login = (userData) => setUser(userData);
+    const logout = () => setUser(null);
+
   }
 
   const loginWithToken = async () => {
@@ -110,6 +117,7 @@ export function AuthProvider({ children }) {
         token,
         register,
         login,
+        setUser,
         logout,
       }}>
       {children}

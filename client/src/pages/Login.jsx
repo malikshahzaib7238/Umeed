@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, Lock, EyeOff, Eye } from 'lucide-react';
+import { Users, Lock, EyeOff, Eye, Mail } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,7 +11,6 @@ const AuthPage = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
-    name: '',
     confirmPassword: ''
   });
   const [loading, setLoading] = useState(false);
@@ -39,7 +38,10 @@ const AuthPage = () => {
         if (formData.password !== formData.confirmPassword) {
           throw new Error('Passwords do not match');
         }
-        const user = await register({ username: formData.username, password: formData.password });
+        const user = await register({
+          username: formData.username,
+          password: formData.password
+        });
         setUser(user); // Set user in context
         navigate('/');
       }
@@ -66,25 +68,6 @@ const AuthPage = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {!isLogin && (
-              <div className="relative">
-                <label htmlFor="name" className="sr-only">Full Name</label>
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Users className="text-gray-400" size={20} />
-                </div>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required={!isLogin}
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Full Name"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                />
-              </div>
-            )}
-
             <div className="relative">
               <label htmlFor="username" className="sr-only">Username</label>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -101,6 +84,24 @@ const AuthPage = () => {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
             </div>
+
+            {!isLogin && (
+              <div className="relative">
+                <label htmlFor="email" className="sr-only">Email</label>
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Mail className="text-gray-400" size={20} />
+                </div>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  onChange={handleChange}
+                  placeholder="Email"
+                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                />
+              </div>
+            )}
 
             <div className="relative">
               <label htmlFor="password" className="sr-only">Password</label>
@@ -140,7 +141,7 @@ const AuthPage = () => {
                   type={showPassword ? 'text' : 'password'}
                   id="confirmPassword"
                   name="confirmPassword"
-                  required={!isLogin}
+                  required
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Confirm Password"

@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Filter, 
-  BookOpen, 
-  Star, 
-  DollarSign, 
-  Clock, 
+import {
+  Search,
+  Filter,
+  BookOpen,
+  Star,
+  DollarSign,
+  Clock,
   User,
   Book,
   Bookmark,
   Zap
 } from 'lucide-react';
-import Header from '../components/Header';
+import Header from '../constants/Header';
 // Expanded and More Diverse Course Catalog
 const mockCourses = [
   {
@@ -113,26 +113,26 @@ const CoursesPage = () => {
 
   useEffect(() => {
     let filteredCourses = mockCourses.filter(course => {
-      const matchesSearch = 
+      const matchesSearch =
         course.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         course.description.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesCategory = 
+
+      const matchesCategory =
         category === 'all' || course.category === category;
-      
-      const matchesSubcategory = 
+
+      const matchesSubcategory =
         subcategory === 'all' || course.subcategory === subcategory;
-      
-      const matchesSkillLevel = 
+
+      const matchesSkillLevel =
         skillLevel === 'all' || course.skillLevel === skillLevel;
-      
-      const matchesPrice = 
+
+      const matchesPrice =
         course.price >= priceRange[0] && course.price <= priceRange[1];
 
-      return matchesSearch && 
-             matchesCategory && 
-             matchesSubcategory && 
-             matchesSkillLevel && 
+      return matchesSearch &&
+             matchesCategory &&
+             matchesSubcategory &&
+             matchesSkillLevel &&
              matchesPrice;
     });
 
@@ -148,8 +148,8 @@ const CoursesPage = () => {
   }, [searchTerm, category, subcategory, skillLevel, priceRange, sortBy]);
 
   const renderCourse = (course) => (
-    <div 
-      key={course.id} 
+    <div
+      key={course.id}
       className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition group"
     >
       <div className="flex justify-between items-start mb-4">

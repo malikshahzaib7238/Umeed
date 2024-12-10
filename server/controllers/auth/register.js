@@ -21,7 +21,6 @@ async function register(request, response, next) {
 
   try {
     const {username, password} = request.body
-
     // Verify account username as unique
     const existingAccount = await Account.findOne({username})
     if (existingAccount) {

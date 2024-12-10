@@ -16,4 +16,5 @@ router.post('/login', [], login)
 // GET at path: http://localhost:8080/auth/account
 router.get('/login', [authorizeBearerToken], loginWithToken)
 
+
 module.exports = router

@@ -8,8 +8,8 @@ import {
   ListSubheader,
   ListItemButton,
 } from '@mui/material'
-import OnlineIndicator from './OnlineIndicator'
-import AuthModal from './AuthModal'
+import OnlineIndicator from '../components/OnlineIndicator'
+import AuthModal from '../components/AuthModal'
 import {useAuth} from '../contexts/AuthContext'
 
 export default function Header() {

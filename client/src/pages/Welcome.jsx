@@ -7,6 +7,8 @@ import {
   Network,
   Store,
   Book,
+  UserCircle,
+  LogOut
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
@@ -16,8 +18,10 @@ import { useAuth } from "../contexts/AuthContext";
 
 
 const WelcomePage = () => {
-  const [activeSection, setActiveSection] = useState("overview");
+
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("overview");
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const sections = {
     overview: {
@@ -70,20 +74,26 @@ const WelcomePage = () => {
           <h1 className="text-2xl font-bold">امید | Umeed </h1>
           <nav className="space-x-4">
             {account?.username ? (
-              <div className="flex items-center space-x-4">
-                <span className="text-white">
-                  Welcome, {account.username || "User"}
-                </span>
-                <button
-                  className="bg-white text-indigo-700 px-4 py-2 rounded font-semibold"
-                  onClick={() => {
-                    logout(); // Ensure logout logic is implemented in AuthContext
-                    navigate("/login");
-                  }}
-                >
-                  Logout
-                </button>
-              </div>
+              <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100"
+              >
+                <UserCircle className="mr-2" />
+                <span className="hidden md:inline">{account?.username || "Username"}</span>
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
+                  <ul>
+                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={()=>navigate("/setup")}>Profile</li>
+                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                      <LogOut className="mr-2 inline" /> Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+
             ) : (
               <>
                 <button

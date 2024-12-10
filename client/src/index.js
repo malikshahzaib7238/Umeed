@@ -11,13 +11,23 @@ import ProductsPage from "./pages/Products";
 import Login from "./pages/Login";
 import NetworkingPage from "./pages/Netowrking";
 import CoursesPage from "./pages/Courses";
-import Header from "./components/Header";
+import Header from "./constants/Header";
+import ProfileSetupPage from "./pages/Setup";
 import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
 // Define your routes
+import Network from "./pages/test";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Welcome />, // This route should show the Welcome component when the path is '/'
+  },
+  {
+path:"/test",
+element: <Network/>
+  },
+  {
+path:"/setup",
+element: <ProfileSetupPage/>
   },
   {
     path: "/sell",

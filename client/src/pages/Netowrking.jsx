@@ -1,139 +1,197 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Users, MessageCircle, Award, Globe, Filter, Search, 
-  MapPin, Briefcase, Share2, CheckCircle, X
+import {
+  Users, MessageCircle, Award, Globe, Filter, Search,
+  MapPin, Briefcase, Share2, CheckCircle, X, LogOut, UserCircle
 } from 'lucide-react';
+import io from 'socket.io-client';
 import Footer from '../components/Footer';
-// Simulated data representing potential connections and mentors
-const networkData = [
-  {
-    id: 1,
-    name: "Fatima Ahmed",
-    role: "Textile Export Entrepreneur",
-    location: "Karachi, Sindh",
-    expertise: ["Export Marketing", "Textile Design"],
-    mentorAvailable: true,
-    connections: 42,
-    verifiedSkills: ["International Trade", "Product Development"]
-  },
-  {
-    id: 2,
-    name: "Zara Malik",
-    role: "Digital Artisan Marketplace Owner",
-    location: "Hyderabad, Sindh",
-    expertise: ["E-commerce", "Digital Marketing"],
-    mentorAvailable: false,
-    connections: 28,
-    verifiedSkills: ["Social Media Marketing", "Online Sales"]
-  },
-  {
-    id: 3,
-    name: "Amina Bhutto",
-    role: "Sustainable Handicrafts Founder",
-    location: "Sukkur, Sindh",
-    expertise: ["Sustainable Business", "Artisan Empowerment"],
-    mentorAvailable: true,
-    connections: 55,
-    verifiedSkills: ["Community Development", "Ethical Business"]
-  }
-];
-
-// Simulated initial messages for each connection
-const initialChats = {
-  1: [
-    { id: 1, sender: 'Fatima Ahmed', text: 'Hello! Welcome to our professional network.' },
-    { id: 2, sender: 'You', text: 'Hi Fatima, I\'m interested in learning more about textile exports.' }
-  ],
-  2: [
-    { id: 1, sender: 'Zara Malik', text: 'Thanks for connecting! How can I help you today?' }
-  ],
-  3: []
-};
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from "../contexts/AuthContext";
 
 const NetworkingPage = () => {
+  const { logout, account } = useAuth();
+  const navigate = useNavigate();
   const [filters, setFilters] = useState({
     location: '',
     expertise: '',
     mentorOnly: false
   });
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [networkData, setNetworkData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredNetwork, setFilteredNetwork] = useState(networkData);
+  const [filteredNetwork, setFilteredNetwork] = useState([]);
+  const [socket, setSocket] = useState(null);
 
   // Chat state management
   const [activeChatId, setActiveChatId] = useState(null);
-  const [chats, setChats] = useState(initialChats);
+  const [chats, setChats] = useState({});
   const [newMessage, setNewMessage] = useState('');
+
+  // Fetch network data
+  useEffect(() => {
+    const fetchNetworkData = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/network/get");
+        const fetchedData = response.data || [];
+
+        // Combine with initial simulated data if needed
+        const combinedData = [
+          {
+            id: 1,
+            name: "Fatima Ahmed",
+            role: "Textile Export Entrepreneur",
+            location: "Karachi, Sindh",
+            expertise: ["Export Marketing", "Textile Design"],
+            mentorAvailable: true,
+            connections: 42,
+            verifiedSkills: ["International Trade", "Product Development"]
+          },
+          // Add other initial data if needed
+          ...fetchedData
+        ];
+
+        setNetworkData(combinedData);
+        setFilteredNetwork(combinedData);
+      } catch (error) {
+        console.error("Error fetching network data:", error);
+        // Set some default data if fetch fails
+        setNetworkData([]);
+        setFilteredNetwork([]);
+      }
+    };
+
+    fetchNetworkData();
+  }, []);
 
   // Dynamic filtering logic
   useEffect(() => {
+    if (!networkData) return;
+
     const results = networkData.filter(profile => {
-      const matchesSearch = profile.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                             profile.role.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      const matchesLocation = !filters.location || 
+      const matchesSearch =
+        profile.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        profile.role.toLowerCase().includes(searchTerm.toLowerCase());
+
+      const matchesLocation = !filters.location ||
         profile.location.toLowerCase().includes(filters.location.toLowerCase());
-      
-      const matchesExpertise = !filters.expertise || 
-        profile.expertise.some(exp => 
+
+      const matchesExpertise = !filters.expertise ||
+        profile.expertise.some(exp =>
           exp.toLowerCase().includes(filters.expertise.toLowerCase())
         );
-      
+
       const matchesMentorStatus = !filters.mentorOnly || profile.mentorAvailable;
 
       return matchesSearch && matchesLocation && matchesExpertise && matchesMentorStatus;
     });
 
     setFilteredNetwork(results);
-  }, [searchTerm, filters]);
+  }, [searchTerm, filters, networkData]);
+
+  // Socket connection
+  useEffect(() => {
+    if (!account?._id) return;
+
+    // Establish socket connection
+    const newSocket = io('http://localhost:8080', {
+      query: { userId: account._id }
+    });
+
+    newSocket.on('connect', () => {
+      console.log('Socket connected');
+      // Join user's personal room
+      newSocket.emit('join', account._id);
+    });
+
+    // Listen for incoming messages
+    newSocket.on('receive_message', (messageData) => {
+      const { senderId, content } = messageData;
+
+      setChats(prevChats => {
+        const senderProfile = networkData.find(p => p.id === senderId);
+        return {
+          ...prevChats,
+          [senderId]: [
+            ...(prevChats[senderId] || []),
+            {
+              id: Date.now(),
+              sender: senderProfile ? senderProfile.name : 'Unknown',
+              text: content
+            }
+          ]
+        };
+      });
+    });
+
+    setSocket(newSocket);
+
+    // Cleanup socket on component unmount
+    return () => newSocket.close();
+  }, [account?._id, networkData]);
 
   // Function to start a chat
   const startChat = (profileId) => {
     setActiveChatId(profileId);
+
+    if (socket) {
+      // Fetch message history
+      socket.emit('get_messages', {
+        userId: account?._id,
+        otherUserId: profileId
+      });
+
+      // Listen for message history
+      socket.once('message_history', (messages) => {
+        // Transform messages to match existing chat format
+        const formattedMessages = messages.map(msg => ({
+          id: msg._id,
+          sender: msg.sender === account?._id ? 'You' :
+            networkData.find(p => p.id === msg.sender)?.name || 'Unknown',
+          text: msg.content
+        }));
+
+        setChats(prevChats => ({
+          ...prevChats,
+          [profileId]: formattedMessages || []
+        }));
+      });
+
+      // Initialize empty chat if no history exists
+      if (!chats[profileId]) {
+        setChats(prevChats => ({
+          ...prevChats,
+          [profileId]: []
+        }));
+      }
+    }
   };
 
   // Function to send a message
   const sendMessage = () => {
-    if (newMessage.trim() === '') return;
+    if (!newMessage.trim() || !socket || !activeChatId) return;
 
-    const updatedChats = {
-      ...chats,
+    // Emit message through socket
+    socket.emit('send_message', {
+      senderId: account?._id,
+      receiverId: activeChatId,
+      content: newMessage
+    });
+
+    // Optimistically update chat
+    setChats(prevChats => ({
+      ...prevChats,
       [activeChatId]: [
-        ...chats[activeChatId],
+        ...(prevChats[activeChatId] || []),
         {
-          id: chats[activeChatId].length + 1,
+          id: Date.now(),
           sender: 'You',
           text: newMessage
         }
       ]
-    };
+    }));
 
-    // Simulate a response after 1 second
-    setChats(updatedChats);
-    setNewMessage('');
 
-    // Simulate an auto-response
-    setTimeout(() => {
-      const profile = networkData.find(p => p.id === activeChatId);
-      const autoResponse = [
-        `Great message! I'm always happy to discuss ${profile.expertise[0]}.`,
-        `I'd be glad to share more about my experience in ${profile.role}.`,
-        'Feel free to ask me any questions you might have.'
-      ];
-
-      const randomResponse = autoResponse[Math.floor(Math.random() * autoResponse.length)];
-
-      setChats(prevChats => ({
-        ...prevChats,
-        [activeChatId]: [
-          ...prevChats[activeChatId],
-          {
-            id: prevChats[activeChatId].length + 2,
-            sender: profile.name,
-            text: randomResponse
-          }
-        ]
-      }));
-    }, 1000);
   };
 
   // Close chat window
@@ -141,16 +199,38 @@ const NetworkingPage = () => {
     setActiveChatId(null);
   };
 
+  // Rest of the component remains the same as in the original code...
+  // (Include the rest of the render method from the original code)
+
   return (
     <>
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold flex items-center">
-            <Users className="mr-3" />  امید | Professional Network
-          </h1>
-        </div>
-      </header>
+    <header className="bg-indigo-700 text-white p-6 shadow-md flex justify-between items-center">
+          <div className="container mx-auto flex justify-between items-center">
+            <h1 className="text-2xl font-bold flex items-center">
+              <Users className="mr-3" /> امید | Professional Network
+            </h1>
+            <div className="relative">
+              <button
+                onClick={() => setShowDropdown(!showDropdown)}
+                className="flex items-center bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100"
+              >
+                <UserCircle className="mr-2" />
+                <span className="hidden md:inline">{account?.username || "Username"}</span>
+              </button>
+              {showDropdown && (
+                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
+                  <ul>
+                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={()=>navigate("/setup")}>Profile</li>
+                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                      <LogOut className="mr-2 inline" /> Logout
+                    </li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          </div>
+        </header>
 
       <main className="container mx-auto py-12 px-4">
         {/* Search and Filter Section */}
@@ -158,7 +238,7 @@ const NetworkingPage = () => {
           <div className="flex space-x-4">
             <div className="relative flex-grow">
               <Search className="absolute left-3 top-3 text-gray-400" />
-              <input 
+              <input
                 type="text"
                 placeholder="Search entrepreneurs, skills, locations"
                 value={searchTerm}
@@ -166,11 +246,11 @@ const NetworkingPage = () => {
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
               />
             </div>
-            <button 
+            <button
               onClick={() => setFilters(prev => ({...prev, mentorOnly: !prev.mentorOnly}))}
               className={`px-4 py-2 rounded-md flex items-center space-x-2 ${
-                filters.mentorOnly 
-                  ? 'bg-indigo-600 text-white' 
+                filters.mentorOnly
+                  ? 'bg-indigo-600 text-white'
                   : 'bg-gray-200 text-gray-700'
               }`}
             >
@@ -183,8 +263,8 @@ const NetworkingPage = () => {
         {/* Networking Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           {filteredNetwork.map(profile => (
-            <div 
-              key={profile.id} 
+            <div
+              key={profile.id}
               className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow"
             >
               <div className="flex justify-between items-start mb-4">
@@ -192,9 +272,9 @@ const NetworkingPage = () => {
                   <h2 className="text-xl font-bold text-gray-800 flex items-center">
                     {profile.name}
                     {profile.mentorAvailable && (
-                      <CheckCircle 
-                        size={20} 
-                        className="ml-2 text-green-500" 
+                      <CheckCircle
+                        size={20}
+                        className="ml-2 text-green-500"
                         title="Mentor Available"
                       />
                     )}
@@ -223,13 +303,13 @@ const NetworkingPage = () => {
                   <Briefcase size={20} className="mr-2 text-indigo-600" />
                   <span>{profile.connections} Connections</span>
                 </div>
-                
+
                 <div className="mt-4">
                   <h3 className="font-semibold text-gray-700 mb-2">Verified Skills</h3>
                   <div className="flex flex-wrap gap-2">
                     {profile.verifiedSkills.map(skill => (
-                      <span 
-                        key={skill} 
+                      <span
+                        key={skill}
                         className="bg-gray-100 text-gray-700 px-2 py-1 rounded-full text-sm"
                       >
                         {skill}
@@ -310,5 +390,4 @@ const NetworkingPage = () => {
     </>
   );
 };
-
 export default NetworkingPage;

@@ -8,7 +8,9 @@ import Footer from '../components/Footer';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
-
+function capitalizeFirstLetter(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
 const NetworkingPage = () => {
   const { logout, account } = useAuth();
   const navigate = useNavigate();
@@ -34,7 +36,7 @@ const NetworkingPage = () => {
       try {
         const response = await axios.get("http://localhost:8080/network/get");
         const fetchedData = response.data || [];
-
+        console.log(fetchedData);
         // Combine with initial simulated data if needed
         const combinedData = [
           {
@@ -270,7 +272,7 @@ const NetworkingPage = () => {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h2 className="text-xl font-bold text-gray-800 flex items-center">
-                    {profile.name}
+                    {capitalizeFirstLetter(profile.name)}
                     {profile.mentorAvailable && (
                       <CheckCircle
                         size={20}
@@ -298,10 +300,6 @@ const NetworkingPage = () => {
                 <div className="flex items-center text-gray-600">
                   <MapPin size={20} className="mr-2 text-indigo-600" />
                   <span>{profile.location}</span>
-                </div>
-                <div className="flex items-center text-gray-600">
-                  <Briefcase size={20} className="mr-2 text-indigo-600" />
-                  <span>{profile.connections} Connections</span>
                 </div>
 
                 <div className="mt-4">

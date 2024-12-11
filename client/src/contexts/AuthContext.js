@@ -65,9 +65,7 @@ export function AuthProvider({ children }) {
     setAccount(null)
     setToken(null)
     setUser(null)
-    const login = (userData) => setUser(userData);
-    const logout = () => setUser(null);
-
+    
   }
 
   const loginWithToken = async () => {

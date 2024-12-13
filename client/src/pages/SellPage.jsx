@@ -38,11 +38,131 @@ const SellPage = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // TODO: Implement submission logic
-    console.log(selectedType === 'product' ? productDetails : courseDetails);
+
+    console.log("Selected Type: ",selectedType);
+  
+    if (selectedType === 'product') {
+      try {
+        // Create a FormData object to handle text and image data
+        const formData = new FormData();
+        formData.append('name', productDetails.name);
+        formData.append('description', productDetails.description);
+        formData.append('price', productDetails.price);
+        formData.append('category', productDetails.category);
+        if (productDetails.image) {
+          formData.append('image', productDetails.image);
+        }else{
+          formData.append('image', null);
+        }
+
+      console.log("Form Data:", Object.fromEntries(formData.entries()));
+      console.log("Form Data Again: ",formData);
+
+        
+  
+        // Send POST request to backend
+        const response = await fetch('http://localhost:8080/sell', {
+          method: 'POST',
+          body: formData,
+        });
+  
+        const result = await response.json();
+        console.log(result);
+  
+        if (response.ok) {
+          alert('Product listed successfully!');
+          setProductDetails({
+            name: '',
+            description: '',
+            price: '', 
+            category: '',
+            image: null, 
+          });
+          setSelectedType(null); // Reset form
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Error submitting product:', error);
+        alert('Failed to list the product. Please try again.');
+      }
+    } else if (selectedType === 'course') {
+      // Implement logic for course submission here
+      console.log(courseDetails);
+    }
   };
+  
+
+
+// const mockData=[
+//   {
+//     name: "Sindhi Embroidered Cushion",
+//     description: "Handcrafted traditional cushion with intricate Sindhi embroidery",
+//     price: 1200,
+//     category: "textiles",
+//     image: null
+//   }
+// ]
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+
+//     console.log("Selected Type: ",selectedType);
+  
+//     if (selectedType === 'product') {
+//       try {
+        
+//         const formData= new FormData();
+//         const product = mockData[0];
+
+//       // Append each property to formData
+//       formData.append("name", product.name);
+//       formData.append("description", product.description);
+//       formData.append("price", product.price);
+//       formData.append("category", product.category);
+//       formData.append("image", null);
+
+      // console.log("Form Data:", Object.fromEntries(formData.entries()));
+      // console.log("Form Data Again: ",formData);
+  
+//         // Send POST request to backend
+//         const response = await fetch('http://localhost:8080/sell', {
+//           method: 'POST',
+//           // headers: {
+//           //   "Content-Type": "application/json", // Ensure correct headers
+//           // },
+//           body: formData
+//         });
+  
+//         const result = await response.json();
+//         console.log(result);
+  
+//         if (response.ok) {
+//           alert('Product listed successfully!');
+//           setProductDetails({
+//             name: '',
+//             description: '',
+//             price: '', 
+//             category: '',
+//             image: null, 
+//           });
+//           setSelectedType(null); // Reset form
+//         } else {
+//           alert(`Error: ${result.message}`);
+//         }
+//       } catch (error) {
+//         console.error('Error submitting product:', error);
+//         alert('Failed to list the product. Please try again.');
+//       }
+//     } else if (selectedType === 'course') {
+//       // Implement logic for course submission here
+//       console.log(courseDetails);
+//     }
+//   };
+
+
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
@@ -83,7 +203,7 @@ const SellPage = () => {
         )}
 
         {selectedType === 'product' && (
-          <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md">
+          <form onSubmit={handleSubmit} method='POST' className="bg-white p-8 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-indigo-700">List Your Handmade Product</h2>
             
             <div className="grid md:grid-cols-2 gap-4">

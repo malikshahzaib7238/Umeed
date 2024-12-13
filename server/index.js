@@ -6,6 +6,9 @@ const { Server } = require('socket.io');
 const Message = require('./models/Message');
 const authRoutes = require('./routes/auth');
 const networkRoutes = require('./routes/network');
+const productRoutes = require('./routes/product');
+const cors = require('cors');
+
 
 const PORT = process.env.PORT || 8080;
 
@@ -85,11 +88,18 @@ async function bootstrap() {
     });
   });
 
+  app.use(cors({
+    origin: "http://localhost:3000", // Frontend URL
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  }));
+
+
   // Routes
   app.get('/', (req, res) => res.status(200).json({ message: 'Hello World!' }));
   app.get('/healthz', (req, res) => res.status(200).send());
   app.use('/auth', authRoutes);
   app.use('/network', networkRoutes);
+  app.use('/sell',productRoutes);
 
   // Start server
   server.listen(PORT, () => {

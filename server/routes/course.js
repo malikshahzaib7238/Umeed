@@ -31,4 +31,16 @@ router.post("/", upload.none(), async (req, res) => {
   }
 });
 
+
+// Fetch all courses (GET)
+router.get("/", async (req, res) => {
+  console.log("This API got hit Courses GET wali");
+
+  try {
+    const courses = await Course.find(); // Fetch all course from MongoDB
+    res.status(200).json({ message: 'Course fetched successfully', courses });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching courses', error });
+  }
+});
 module.exports = router;

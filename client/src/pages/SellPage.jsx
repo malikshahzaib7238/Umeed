@@ -54,7 +54,7 @@ const SellPage = () => {
         if (productDetails.image) {
           formData.append('image', productDetails.image);
         } else {
-          formData.append('image', null);
+          formData.append('image', '');
         }
 
         console.log("Form Data:", Object.fromEntries(formData.entries()));

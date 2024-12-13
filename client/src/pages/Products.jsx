@@ -1,80 +1,56 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Search, 
-  Filter, 
-  ShoppingCart, 
-  Star, 
-  DollarSign, 
+import {
+  Search,
+  Filter,
+  ShoppingCart,
+  Star,
+  DollarSign,
   ChevronDown, Users
 } from 'lucide-react';
+// import axios from '@/axios'
 
-// Expanded Mock Product Data with more categories
-const mockProducts = [
-  {
-    id: 1,
-    name: "Sindhi Embroidered Cushion",
-    description: "Handcrafted traditional cushion with intricate Sindhi embroidery",
-    price: 1200,
-    seller: "Fatima's Crafts",
-    category: "textile",
-    subcategory: "embroidery",
-    rating: 4.5,
-    image: "/api/placeholder/300/300"
-  },
-  {
-    id: 2,
-    name: "Pottery Flower Vase",
-    description: "Handmade clay vase with traditional Sindhi design",
-    price: 2500,
-    seller: "Ceramic Dreams",
-    category: "pottery",
-    subcategory: "clay",
-    rating: 4.8,
-    image: "/api/placeholder/300/300"
-  },
-  {
-    id: 3,
-    name: "Silver Jhumka Earrings",
-    description: "Intricate silver earrings with traditional Sindhi design",
-    price: 3500,
-    seller: "Heritage Jewels",
-    category: "jewelry",
-    subcategory: "silver",
-    rating: 4.9,
-    image: "/api/placeholder/300/300"
-  },
-  {
-    id: 4,
-    name: "Handwoven Crochet Shawl",
-    description: "Delicate crochet shawl with intricate patterns",
-    price: 4000,
-    seller: "Craft Collective",
-    category: "textile",
-    subcategory: "crochet",
-    rating: 4.6,
-    image: "/api/placeholder/300/300"
-  }
-];
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
   const [subcategory, setSubcategory] = useState('all');
-  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [priceRange, setPriceRange] = useState([0, 1000000]);
   const [sortBy, setSortBy] = useState('rating');
   const [products, setProducts] = useState([]);
+  const [allProducts, setAllProducts] = useState([]);
 
-  // Dynamically generate category and subcategory lists
-  const categories = ['all', ...new Set(mockProducts.map(p => p.category))];
-  const subcategories = {
-    'all': ['all'],
-    'textile': ['all', 'embroidery', 'crochet'],
-    'pottery': ['all', 'clay', 'ceramic'],
-    'jewelry': ['all', 'silver', 'gold']
-  };
+  // Static categories list
+  const categories = ["textiles", "pottery", "jewelry", "other","all"];
+
+  const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
+
+  // Fetch products from the API
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/sell/product');
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log("Fetched Products Data: ", data);
+        const fetchedProducts = data.products.map(product => ({
+          ...product,
+          image: product.image ? product.image : placeholderImage, // Use dummy image if image is null
+        }));
+        setAllProducts(fetchedProducts);
+        setProducts(fetchedProducts);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
 
   useEffect(() => {
-    let filteredProducts = mockProducts.filter(product => {
+    let filteredProducts = allProducts.filter(product => {
       const matchesSearch =
         product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         product.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -99,11 +75,11 @@ const ProductsPage = () => {
     });
 
     setProducts(filteredProducts);
-  }, [searchTerm, category, subcategory, priceRange, sortBy]);
+  }, [searchTerm, category, subcategory, priceRange, sortBy, allProducts]);
 
-  const renderProduct = (product) => (
+  const renderProduct = (product, index) => (
     <div
-      key={product.id}
+      key={index}
       className="bg-white rounded-xl shadow-md p-4 flex hover:shadow-lg transition"
     >
       <img
@@ -118,14 +94,11 @@ const ProductsPage = () => {
           <DollarSign size={16} className="text-green-600" />
           <span>{product.price} PKR</span>
           <Star size={16} className="text-yellow-500" />
-          <span>{product.rating}/5</span>
+          {/* <span>{product.rating}/5</span> */}
         </div>
         <div className="flex space-x-2">
-          <span className="bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full text-xs">
-            {product.category}
-          </span>
           <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
-            {product.subcategory}
+            {product.category}
           </span>
         </div>
         <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center">
@@ -137,7 +110,7 @@ const ProductsPage = () => {
   );
 
   return (
-<div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
+    <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
       <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
@@ -146,7 +119,7 @@ const ProductsPage = () => {
         </div>
       </header>
 
-<div classname="container mx-auto py-12 px-4">
+      <div classname="container mx-auto py-12 px-4">
         <div className="grid md:grid-cols-4 gap-6 py-12 px-4" >
           {/* Sidebar Filters */}
           <div className="bg-white p-6 rounded-xl shadow-md">
@@ -160,43 +133,31 @@ const ProductsPage = () => {
                 value={category}
                 onChange={(e) => {
                   setCategory(e.target.value);
-                  setSubcategory('all'); // Reset subcategory when category changes
                 }}
                 className="w-full p-2 border rounded"
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat.charAt(0).toUpperCase() + cat.slice(1)}</option>
+                {categories.map((cat) => (
+                  <option key={cat} value={cat}>
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)} {/* Capitalize the first letter */}
+                  </option>
                 ))}
               </select>
             </div>
 
-            <div className="mb-4">
-              <label className="block mb-2">Product Subcategory</label>
-              <select
-                value={subcategory}
-                onChange={(e) => setSubcategory(e.target.value)}
-                className="w-full p-2 border rounded"
-                disabled={category === 'all'}
-              >
-                {subcategories[category].map(subcat => (
-                  <option key={subcat} value={subcat}>{subcat.charAt(0).toUpperCase() + subcat.slice(1)}</option>
-                ))}
-              </select>
-            </div>
 
             <div className="mb-4">
               <label className="block mb-2">Price Range (PKR)</label>
               <div className="flex space-x-2">
-                <input 
-                  type="number" 
-                  placeholder="Min" 
+                <input
+                  type="number"
+                  placeholder="Min"
                   value={priceRange[0]}
                   onChange={(e) => setPriceRange([Number(e.target.value), priceRange[1]])}
                   className="w-full p-2 border rounded"
                 />
-                <input 
-                  type="number" 
-                  placeholder="Max" 
+                <input
+                  type="number"
+                  placeholder="Max"
                   value={priceRange[1]}
                   onChange={(e) => setPriceRange([priceRange[0], Number(e.target.value)])}
                   className="w-full p-2 border rounded"
@@ -206,7 +167,7 @@ const ProductsPage = () => {
 
             <div>
               <label className="block mb-2">Sort By</label>
-              <select 
+              <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
                 className="w-full p-2 border rounded"
@@ -221,16 +182,16 @@ const ProductsPage = () => {
           <div className="col-span-3 space-y-4">
             <div className="flex space-x-4">
               <div className="relative flex-grow">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   placeholder="Search products..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="w-full p-3 pl-10 border rounded-full"
                 />
-                <Search 
-                  size={20} 
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" 
+                <Search
+                  size={20}
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"
                 />
               </div>
             </div>
@@ -246,8 +207,8 @@ const ProductsPage = () => {
             </div>
           </div>
         </div>
-        </div>
       </div>
+    </div>
 
   );
 };

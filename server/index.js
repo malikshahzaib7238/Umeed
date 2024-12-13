@@ -7,6 +7,8 @@ const Message = require('./models/Message');
 const authRoutes = require('./routes/auth');
 const networkRoutes = require('./routes/network');
 const productRoutes = require('./routes/product');
+const courseRoutes = require('./routes/course');
+
 const cors = require('cors');
 
 
@@ -99,7 +101,8 @@ async function bootstrap() {
   app.get('/healthz', (req, res) => res.status(200).send());
   app.use('/auth', authRoutes);
   app.use('/network', networkRoutes);
-  app.use('/sell',productRoutes);
+  app.use('/sell/product',productRoutes);
+  app.use('/sell/course', courseRoutes);
 
   // Start server
   server.listen(PORT, () => {

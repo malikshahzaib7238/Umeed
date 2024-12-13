@@ -41,8 +41,8 @@ const SellPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Selected Type: ",selectedType);
-  
+    console.log("Selected Type: ", selectedType);
+
     if (selectedType === 'product') {
       try {
         // Create a FormData object to handle text and image data
@@ -53,32 +53,32 @@ const SellPage = () => {
         formData.append('category', productDetails.category);
         if (productDetails.image) {
           formData.append('image', productDetails.image);
-        }else{
+        } else {
           formData.append('image', null);
         }
 
-      console.log("Form Data:", Object.fromEntries(formData.entries()));
-      console.log("Form Data Again: ",formData);
+        console.log("Form Data:", Object.fromEntries(formData.entries()));
+        console.log("Form Data Again: ", formData);
 
-        
-  
+
+
         // Send POST request to backend
-        const response = await fetch('http://localhost:8080/sell', {
+        const response = await fetch('http://localhost:8080/sell/product', {
           method: 'POST',
           body: formData,
         });
-  
+
         const result = await response.json();
         console.log(result);
-  
+
         if (response.ok) {
           alert('Product listed successfully!');
           setProductDetails({
             name: '',
             description: '',
-            price: '', 
+            price: '',
             category: '',
-            image: null, 
+            image: null,
           });
           setSelectedType(null); // Reset form
         } else {
@@ -89,84 +89,57 @@ const SellPage = () => {
         alert('Failed to list the product. Please try again.');
       }
     } else if (selectedType === 'course') {
-      // Implement logic for course submission here
-      console.log(courseDetails);
+      try {
+        const formData = new FormData();
+        formData.append('title', courseDetails.title);
+        formData.append('description', courseDetails.description);
+        formData.append('price', courseDetails.price);
+        formData.append('duration', courseDetails.duration);
+        formData.append('skillLevel', courseDetails.skillLevel);
+
+
+        console.log("Form Data:", Object.fromEntries(formData.entries()));
+        console.log("Form Data Again: ", formData);
+
+
+
+        // Send POST request to backend
+        const response = await fetch('http://localhost:8080/sell/course', {
+          method: 'POST',
+          body: formData,
+        });
+
+        const result = await response.json();
+        console.log(result);
+
+        if (response.ok) {
+          alert('Course listed successfully!');
+          setCourseDetails({
+            title: '',
+            description: '',
+            price: '',
+            duration: '',
+            skillLevel: '',
+          });
+          setSelectedType(null); // Reset form
+        } else {
+          alert(`Error: ${result.message}`);
+        }
+      } catch (error) {
+        console.error('Error submitting Course:', error);
+        alert('Failed to list the course. Please try again.');
+      }
     }
   };
-  
 
 
-// const mockData=[
-//   {
-//     name: "Sindhi Embroidered Cushion",
-//     description: "Handcrafted traditional cushion with intricate Sindhi embroidery",
-//     price: 1200,
-//     category: "textiles",
-//     image: null
-//   }
-// ]
 
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-
-//     console.log("Selected Type: ",selectedType);
-  
-//     if (selectedType === 'product') {
-//       try {
-        
-//         const formData= new FormData();
-//         const product = mockData[0];
-
-//       // Append each property to formData
-//       formData.append("name", product.name);
-//       formData.append("description", product.description);
-//       formData.append("price", product.price);
-//       formData.append("category", product.category);
-//       formData.append("image", null);
-
-      // console.log("Form Data:", Object.fromEntries(formData.entries()));
-      // console.log("Form Data Again: ",formData);
-  
-//         // Send POST request to backend
-//         const response = await fetch('http://localhost:8080/sell', {
-//           method: 'POST',
-//           // headers: {
-//           //   "Content-Type": "application/json", // Ensure correct headers
-//           // },
-//           body: formData
-//         });
-  
-//         const result = await response.json();
-//         console.log(result);
-  
-//         if (response.ok) {
-//           alert('Product listed successfully!');
-//           setProductDetails({
-//             name: '',
-//             description: '',
-//             price: '', 
-//             category: '',
-//             image: null, 
-//           });
-//           setSelectedType(null); // Reset form
-//         } else {
-//           alert(`Error: ${result.message}`);
-//         }
-//       } catch (error) {
-//         console.error('Error submitting product:', error);
-//         alert('Failed to list the product. Please try again.');
-//       }
-//     } else if (selectedType === 'course') {
-//       // Implement logic for course submission here
-//       console.log(courseDetails);
-//     }
-//   };
 
 
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
-              <header className="bg-indigo-700 text-white p-6 shadow-md">
+      <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
             <ShoppingBag className="mr-3" />  امید | Selling Platform
@@ -178,7 +151,7 @@ const SellPage = () => {
 
         {!selectedType && (
           <div className="grid md:grid-cols-2 gap-6">
-            <button 
+            <button
               onClick={() => handleTypeSelection('product')}
               className="bg-white border-2 border-indigo-200 p-6 rounded-xl hover:shadow-lg transition flex items-center space-x-4"
             >
@@ -189,7 +162,7 @@ const SellPage = () => {
               </div>
             </button>
 
-            <button 
+            <button
               onClick={() => handleTypeSelection('course')}
               className="bg-white border-2 border-indigo-200 p-6 rounded-xl hover:shadow-lg transition flex items-center space-x-4"
             >
@@ -205,44 +178,44 @@ const SellPage = () => {
         {selectedType === 'product' && (
           <form onSubmit={handleSubmit} method='POST' className="bg-white p-8 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-indigo-700">List Your Handmade Product</h2>
-            
+
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block mb-2">Product Name</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="name"
                   value={productDetails.name}
                   onChange={handleProductChange}
-                  className="w-full p-2 border rounded" 
-                  required 
+                  className="w-full p-2 border rounded"
+                  required
                 />
               </div>
               <div>
                 <label className="block mb-2">Price (PKR)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   name="price"
                   value={productDetails.price}
                   onChange={handleProductChange}
-                  className="w-full p-2 border rounded" 
-                  required 
+                  className="w-full p-2 border rounded"
+                  required
                 />
               </div>
               <div className="col-span-2">
                 <label className="block mb-2">Description</label>
-                <textarea 
+                <textarea
                   name="description"
                   value={productDetails.description}
                   onChange={handleProductChange}
-                  className="w-full p-2 border rounded" 
+                  className="w-full p-2 border rounded"
                   rows="4"
-                  required 
+                  required
                 />
               </div>
               <div>
                 <label className="block mb-2">Category</label>
-                <select 
+                <select
                   name="category"
                   value={productDetails.category}
                   onChange={handleProductChange}
@@ -258,16 +231,16 @@ const SellPage = () => {
               <div>
                 <label className="block mb-2">Product Image</label>
                 <div className="flex items-center space-x-4">
-                  <input 
-                    type="file" 
+                  <input
+                    type="file"
                     name="image"
                     onChange={handleProductChange}
                     className="hidden"
                     id="product-image"
                     accept="image/*"
                   />
-                  <label 
-                    htmlFor="product-image" 
+                  <label
+                    htmlFor="product-image"
                     className="flex items-center space-x-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded cursor-pointer"
                   >
                     <ImagePlus size={20} />
@@ -280,8 +253,8 @@ const SellPage = () => {
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="mt-6 w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700 transition"
             >
               List Product
@@ -292,44 +265,44 @@ const SellPage = () => {
         {selectedType === 'course' && (
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md">
             <h2 className="text-2xl font-bold mb-6 text-indigo-700">Create Your Skill Course</h2>
-            
+
             <div className="grid md:grid-cols-2 gap-4">
               <div>
                 <label className="block mb-2">Course Title</label>
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   name="title"
                   value={courseDetails.title}
                   onChange={handleCourseChange}
-                  className="w-full p-2 border rounded" 
-                  required 
+                  className="w-full p-2 border rounded"
+                  required
                 />
               </div>
               <div>
                 <label className="block mb-2">Price (PKR)</label>
-                <input 
-                  type="number" 
+                <input
+                  type="number"
                   name="price"
                   value={courseDetails.price}
                   onChange={handleCourseChange}
-                  className="w-full p-2 border rounded" 
-                  required 
+                  className="w-full p-2 border rounded"
+                  required
                 />
               </div>
               <div className="col-span-2">
                 <label className="block mb-2">Course Description</label>
-                <textarea 
+                <textarea
                   name="description"
                   value={courseDetails.description}
                   onChange={handleCourseChange}
-                  className="w-full p-2 border rounded" 
+                  className="w-full p-2 border rounded"
                   rows="4"
-                  required 
+                  required
                 />
               </div>
               <div>
                 <label className="block mb-2">Course Duration</label>
-                <select 
+                <select
                   name="duration"
                   value={courseDetails.duration}
                   onChange={handleCourseChange}
@@ -344,7 +317,7 @@ const SellPage = () => {
               </div>
               <div>
                 <label className="block mb-2">Skill Level</label>
-                <select 
+                <select
                   name="skillLevel"
                   value={courseDetails.skillLevel}
                   onChange={handleCourseChange}
@@ -358,8 +331,8 @@ const SellPage = () => {
               </div>
             </div>
 
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="mt-6 w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700 transition"
             >
               Create Course

@@ -3,10 +3,14 @@ const express = require('express')
 const router = express.Router();
 router.get("/get", async (req, res) => {
   try {
-    // Fetch data from the Account schema
-    console.log("This API got hit network wali");
-    const accounts = await Account.find();
-    console.log(accounts);
+    // Fetch the current user's ID from `req.user`
+    const currentUserId = req.query.id; // Ensure your middleware sets `req.user`
+
+    // Log for debugging
+    console.log("This API got hit: network wali");
+
+    // Fetch all users except the current user
+    const accounts = await Account.find({ _id: { $ne: currentUserId } }); // Exclude current user
 
     // Transform data to match the required networkData structure
     const networkData = accounts.map((account) => ({
@@ -26,6 +30,7 @@ router.get("/get", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch network data" });
   }
 });
+
 
 
 

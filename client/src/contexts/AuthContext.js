@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
     setAccount(null)
     setToken(null)
     setUser(null)
-    
+
   }
 
   const loginWithToken = async () => {

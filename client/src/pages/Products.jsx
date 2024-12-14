@@ -9,8 +9,10 @@ import {
 } from 'lucide-react';
 // import axios from '@/axios'
 
-
+import { useNavigate } from 'react-router-dom';
 const ProductsPage = () => {
+  const navigate = useNavigate();
+
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
   const [subcategory, setSubcategory] = useState('all');
@@ -101,7 +103,7 @@ const ProductsPage = () => {
             {product.category}
           </span>
         </div>
-        <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center">
+        <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center" onClick={()=>navigate("/cart")}>
           <ShoppingCart size={16} className="mr-2" />
           Add to Cart
         </button>

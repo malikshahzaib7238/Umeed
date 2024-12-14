@@ -12,7 +12,7 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 const NetworkingPage = () => {
-  const { logout, account } = useAuth();
+  const { logout, account, id } = useAuth();
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     location: '',
@@ -34,7 +34,7 @@ const NetworkingPage = () => {
   useEffect(() => {
     const fetchNetworkData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/network/get");
+        const response = await axios.get(`http://localhost:8080/network/get?id=${id}`);
         const fetchedData = response.data || [];
         console.log(fetchedData);
         // Combine with initial simulated data if needed

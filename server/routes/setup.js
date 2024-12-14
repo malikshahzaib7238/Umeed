@@ -1,39 +1,53 @@
-const express = require('express');
-const bcrypt = require('bcryptjs');
-const mongoose = require('mongoose');
-// const Account = require('./models/Account');
-const AccountDetails = require('./models/AccountDetails');
-
+const express = require("express");
 const router = express.Router();
+const Account = require("../models/Account"); // Adjust path as per your project structure
 
-// Profile setup endpoint
-router.post('/setup-profile', async (req, res) => {
+// PUT route to update user profile
+router.put("/", async (req, res) => {
   try {
-    const { userId, name, gender, age, location, description, skills, mentorAvailable } = req.body;
-
-    // Create profile details
-    const accountDetails = new AccountDetails({
-      userId,
-      name,
+    const {
+      id,
+      username, // Unique identifier for the account
+      password,
       gender,
       age,
       location,
       description,
       skills,
       mentorAvailable,
-    });
+    } = req.body;
+    console.log(req.body);
+    // Validate that the username is provided
+    if (!id) {
+      return res.status(400).json({ message: "Username is required to update profile" });
+    }
 
-    // Save profile details
-    await accountDetails.save();
+    // Find and update the account
+    const updatedAccount = await Account.findOneAndUpdate(
+      { id }, // Find the document by username
+      {
+        $set: {
+          username,
+          gender,
+          age,
+          location,
+          description,
+          skills,
+          mentorAvailable,
+        },
+      },
+      { new: true, runValidators: true } // Return the updated document and run validators
+    );
 
-    // Link profile to account
-    const account = await Account.findById(userId);
-    account.profile = accountDetails._id;
-    await account.save();
+    if (!updatedAccount) {
+      return res.status(404).json({ message: "Account not found" });
+    }
 
-    res.status(201).json({ message: 'Profile setup successful', profile: accountDetails });
+    // Send success response
+    res.status(200).json({ message: "Profile updated successfully", data: updatedAccount });
   } catch (error) {
-    res.status(500).json({ message: 'Error setting up profile', error });
+    console.error(error);
+    res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 });
 

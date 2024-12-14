@@ -44,11 +44,12 @@ async function login(request, response, next) {
 
     // Generate access token
     const token = signToken({uid: foundAccount._id, role: foundAccount.role})
-
+    const id = foundAccount._id;
     response.status(200).json({
       message: 'Succesfully logged-in',
       data: foundAccount,
       token,
+      id
     })
   } catch (error) {
     console.error(error)

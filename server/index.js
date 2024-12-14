@@ -8,7 +8,7 @@ const authRoutes = require('./routes/auth');
 const networkRoutes = require('./routes/network');
 const productRoutes = require('./routes/product');
 const courseRoutes = require('./routes/course');
-
+const setupRoutes = require('./routes/setup');
 const cors = require('cors');
 
 
@@ -103,6 +103,7 @@ async function bootstrap() {
   app.use('/network', networkRoutes);
   app.use('/sell/product',productRoutes);
   app.use('/sell/course', courseRoutes);
+  app.use('/setup/', setupRoutes);
 
   // Start server
   server.listen(PORT, () => {

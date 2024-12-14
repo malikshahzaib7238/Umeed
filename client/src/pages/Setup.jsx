@@ -1,59 +1,72 @@
-import React, { useState } from 'react';
-import { 
-  User, MapPin, Briefcase, Award, Edit, Save, X
-} from 'lucide-react';
-import Footer from '../components/Footer';
-
+import React, { useState } from "react";
+import axios from "axios"; // Ensure axios is installed via npm install axios
+import {
+  User,
+  MapPin,
+  Edit,
+  Save,
+  X,
+} from "lucide-react";
+import Footer from "../components/Footer";
+import { useAuth } from "../contexts/AuthContext";
 const ProfileSetupPage = () => {
-  // State to manage profile information
   const [profile, setProfile] = useState({
-    name: '',
-    gender: '',
-    age: '',
-    location: '',
-    description: '',
+    username: "",
+    gender: "",
+    age: "",
+    location: "",
+    description: "",
     skills: [],
-    mentorAvailable: false
+    mentorAvailable: false,
   });
+  const { account,token, id } = useAuth();
 
-  // State to manage skill input
-  const [skillInput, setSkillInput] = useState('');
+  const [skillInput, setSkillInput] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Handle general input changes
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setProfile(prevProfile => ({
+    setProfile((prevProfile) => ({
       ...prevProfile,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
-  // Add skill to skills array
   const addSkill = () => {
     if (skillInput.trim() && !profile.skills.includes(skillInput.trim())) {
-      setProfile(prevProfile => ({
+      setProfile((prevProfile) => ({
         ...prevProfile,
-        skills: [...prevProfile.skills, skillInput.trim()]
+        skills: [...prevProfile.skills, skillInput.trim()],
       }));
-      setSkillInput(''); // Clear input after adding
+      setSkillInput("");
     }
   };
 
-  // Remove a skill from skills array
   const removeSkill = (skillToRemove) => {
-    setProfile(prevProfile => ({
+    setProfile((prevProfile) => ({
       ...prevProfile,
-      skills: prevProfile.skills.filter(skill => skill !== skillToRemove)
+      skills: prevProfile.skills.filter((skill) => skill !== skillToRemove),
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the profile data to your backend
-    console.log('Profile submitted:', profile);
-    // You might want to add a success message or redirect
+    setIsSubmitting(true);
+    try {
+profile.id= id;
+      // Replace URL with your backend API endpoint
+      const response = await axios.put("http://localhost:8080/setup/", profile);
+      console.log("Profile updated:", response.data);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error.response?.data || error.message);
+      alert("Failed to update profile.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+
 
   return (
     <>
@@ -67,8 +80,8 @@ const ProfileSetupPage = () => {
       </header>
 
       <main className="container mx-auto py-12 px-4">
-        <form 
-          onSubmit={handleSubmit} 
+        <form
+          onSubmit={handleSubmit}
           className="bg-white shadow-md rounded-xl p-8 max-w-2xl mx-auto"
         >
           <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
@@ -83,9 +96,9 @@ const ProfileSetupPage = () => {
             </label>
             <input
               type="text"
-              id="name"
-              name="name"
-              value={profile.name}
+              id="username"
+              name="username"
+              value={profile.username}
               onChange={handleInputChange}
               required
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
@@ -200,12 +213,12 @@ const ProfileSetupPage = () => {
             {/* Displayed Skills */}
             <div className="flex flex-wrap gap-2 mt-3">
               {profile.skills.map(skill => (
-                <span 
-                  key={skill} 
+                <span
+                  key={skill}
                   className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center"
                 >
                   {skill}
-                  <button 
+                  <button
                     onClick={() => removeSkill(skill)}
                     className="ml-2 text-red-500 hover:text-red-700"
                   >

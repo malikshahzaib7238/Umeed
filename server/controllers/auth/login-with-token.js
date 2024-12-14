@@ -7,7 +7,7 @@ async function loginWithToken(request, response, next) {
 
     // Get account from DB, existance not verified because we are already authorized at this point
     const foundAccount = await Account.findOne({ _id: uid }).select('-password')
-
+    const id = foundAccount._id;
     // Generate access token
     const token = signToken({ uid: foundAccount._id, role: foundAccount.role })
 
@@ -15,6 +15,7 @@ async function loginWithToken(request, response, next) {
       message: 'Account fetched',
       data: foundAccount,
       token,
+      id,
     })
   } catch (error) {
     console.error(error)

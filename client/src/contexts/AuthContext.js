@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import axios from '../utils/axios'
+// import { set } from '../../../server/utils/app'
 
 // init context
 const AuthContext = createContext()
@@ -13,6 +14,7 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [user, setUser] = useState(null);
+  const [id, setID] = useState(null);
   const [account, setAccount] = useState(null)
   const [token, setToken] = useState(localStorage.getItem('token') || null)
 
@@ -46,8 +48,10 @@ export function AuthProvider({ children }) {
           data: {
             data: accountData,
             token: accessToken,
+            id:id,
           },
         }) => {
+          setID(id)
           setAccount(accountData)
           setToken(accessToken)
           setIsLoggedIn(true)
@@ -74,13 +78,14 @@ export function AuthProvider({ children }) {
         data: {
           data: accountData,
           token: accessToken,
+          id:id,
         },
       } = await axios.get('/auth/login', {
         headers: {
           authorization: `Bearer ${token}`,
         },
       })
-
+      setID(id)
       setAccount(accountData)
       setToken(accessToken)
       setIsLoggedIn(true)
@@ -111,6 +116,7 @@ export function AuthProvider({ children }) {
     <AuthContext.Provider
       value={{
         isLoggedIn,
+        id,
         account,
         token,
         register,

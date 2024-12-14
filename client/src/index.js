@@ -17,6 +17,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Network from "./pages/test";
 import CheckoutPage from "./pages/Checkout";
 import CartPage from "./pages/Cart";
+import CourseEnrollmentPage from "./pages/CourseEnroll";
 
 const Router = () => {
   const { isLoggedIn } = useAuth(); // Correctly fetch the auth status
@@ -32,9 +33,21 @@ const Router = () => {
     },
     {
       path: "/test",
+      element: <Network />, // Public route
+    },
+    {
+      path: "/test",
       element: (
         <ProtectedRoute isLoggedIn={isLoggedIn}>
           <Network />
+        </ProtectedRoute>
+      ),
+    },
+    {
+      path: "/enroll",
+      element: (
+        <ProtectedRoute isLoggedIn={isLoggedIn}>
+          <CourseEnrollmentPage />
         </ProtectedRoute>
       ),
     },

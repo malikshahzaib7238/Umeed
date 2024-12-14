@@ -11,11 +11,12 @@ import {
   Bookmark,
   Zap
 } from 'lucide-react';
-import Header from '../constants/Header';
+import { useNavigate } from 'react-router-dom';
 // Expanded and More Diverse Course Catalog
 
 
 const CoursesPage = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState('');
   const [duration, setDuration] = useState('all');
   const [skillLevel, setSkillLevel] = useState('all');
@@ -31,7 +32,7 @@ const CoursesPage = () => {
   // Static skill levels list
   const skillLevels = ["beginner", "intermediate", "advanced", "all"];
 
-  const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
+  // const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
 
   // Sophisticated Filtering Setup
 
@@ -129,7 +130,7 @@ const CoursesPage = () => {
       </div>
 
       <button className="mt-4 w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center">
-        <BookOpen size={16} className="mr-2" />
+        <BookOpen size={16} className="mr-2" onClick={()=>navigate("/enroll")} />
         Enroll Now
       </button>
     </div>

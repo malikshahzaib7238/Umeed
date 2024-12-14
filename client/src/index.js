@@ -18,6 +18,7 @@ import Network from "./pages/test";
 import CheckoutPage from "./pages/Checkout";
 import CartPage from "./pages/Cart";
 import CourseEnrollmentPage from "./pages/CourseEnroll";
+import { CartProvider } from './hooks/useCartContext'; // Make sure this path is correct
 
 const Router = () => {
   const { isLoggedIn } = useAuth(); // Correctly fetch the auth status
@@ -120,8 +121,10 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
+      <CartProvider>
       <Router />
       <CssBaseline />
+      </CartProvider>
     </AuthProvider>
   </React.StrictMode>
 );

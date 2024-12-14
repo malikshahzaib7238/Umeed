@@ -75,24 +75,35 @@ const WelcomePage = () => {
           <nav className="space-x-4">
             {account?.username ? (
               <div className="relative">
-              <button
-                onClick={() => setShowDropdown(!showDropdown)}
-                className="flex items-center bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100"
-              >
-                <UserCircle className="mr-2" />
-                <span className="hidden md:inline">{account?.username || "Username"}</span>
-              </button>
-              {showDropdown && (
-                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
-                  <ul>
-                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={()=>navigate("/setup")}>Profile</li>
-                    <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={logout}>
-                      <LogOut className="mr-2 inline" /> Logout
-                    </li>
-                  </ul>
+                <div className="flex flex-row">
+                <button
+                  onClick={() => setShowDropdown(!showDropdown)}
+                  className="flex items-center bg-white text-indigo-700 px-4 py-2 mr-4 rounded-md hover:bg-gray-100"
+                >
+                  <UserCircle className="mr-2" />
+                  <span className="hidden md:inline">{account?.username || "Username"}</span>
+                </button>
+
+                {/* View Cart Button */}
+                <button
+                  onClick={() => navigate("/cart")} // Adjust route if needed
+                  className="flex items-center bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100"
+                >
+                  <ShoppingCart className="mr-2" />
+                  <span className="hidden md:inline">View Cart</span>
+                </button>
                 </div>
-              )}
-            </div>
+                {showDropdown && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
+                    <ul>
+                      <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => navigate("/setup")}>Profile</li>
+                      <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                        <LogOut className="mr-2 inline" /> Logout
+                      </li>
+                    </ul>
+                  </div>
+                )}
+              </div>
 
             ) : (
               <>
@@ -129,11 +140,10 @@ const WelcomePage = () => {
                 <button
                   key={key}
                   onClick={() => setActiveSection(key)}
-                  className={`px-4 py-2 rounded-full flex items-center space-x-2 ${
-                    activeSection === key
+                  className={`px-4 py-2 rounded-full flex items-center space-x-2 ${activeSection === key
                       ? "bg-indigo-600 text-white"
                       : "bg-gray-200 text-gray-700"
-                  }`}
+                    }`}
                 >
                   {key === "overview" && <HelpCircle size={20} />}
                   {key === "marketplace" && <ShoppingCart size={20} />}

@@ -7,11 +7,14 @@ import {
   DollarSign,
   ChevronDown, Users
 } from 'lucide-react';
-// import axios from '@/axios'
+
+import { useCart } from '../hooks/useCartContext';
 
 import { useNavigate } from 'react-router-dom';
 const ProductsPage = () => {
   const navigate = useNavigate();
+  const { addToCart } = useCart();
+
 
   const [searchTerm, setSearchTerm] = useState('');
   const [category, setCategory] = useState('all');
@@ -22,7 +25,7 @@ const ProductsPage = () => {
   const [allProducts, setAllProducts] = useState([]);
 
   // Static categories list
-  const categories = ["textiles", "pottery", "jewelry", "other","all"];
+  const categories = ["textiles", "pottery", "jewelry", "other", "all"];
 
   const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
 
@@ -103,7 +106,10 @@ const ProductsPage = () => {
             {product.category}
           </span>
         </div>
-        <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center" onClick={()=>navigate("/cart")}>
+        <button className="mt-2 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center" onClick={() => {
+          console.log('Adding to cart:', product);
+          addToCart(product);
+        }}>
           <ShoppingCart size={16} className="mr-2" />
           Add to Cart
         </button>

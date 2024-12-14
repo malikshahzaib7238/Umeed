@@ -8,53 +8,37 @@ import {
   CheckCircle 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../hooks/useCartContext';
+
 const CartPage = () => {
     const navigate = useNavigate()
-  const [cartItems, setCartItems] = useState([
-    // Placeholder cart items - in a real app, this would come from state management or localStorage
-    {
-      id: 1,
-      name: "Handwoven Textile Scarf",
-      description: "Elegant traditional textile with intricate patterns",
-      price: 2500,
-      quantity: 2,
-      image: 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-~HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'
-    }
-  ]);
+    const { cartItems, removeFromCart, updateQuantity } = useCart();
+    
+    console.log("Cart contents:", cartItems);
+
+
 
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
+  const [promoMessage, setPromoMessage] = useState('');
 
   // Calculate totals
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shippingCost = subtotal > 5000 ? 0 : 250; // Free shipping over 5000 PKR
   const total = subtotal + shippingCost - discount;
 
-  // Promo code handler
+
+  // Function to apply the promo code
   const applyPromoCode = () => {
-    // Simple promo code logic
-    if (promoCode.toUpperCase() === 'UMEED10') {
-      setDiscount(Math.min(subtotal * 0.1, 1000)); // 10% off, max 1000 PKR
+    const validPromoCode = 'UMEED10'; // Example promo code
+    if (promoCode === validPromoCode) {
+      const promoDiscount = subtotal * 0.1; // 10% discount
+      setDiscount(promoDiscount);
+      setPromoMessage(`Promo code applied! You saved ${promoDiscount} PKR.`);
     } else {
-      alert('Invalid promo code');
+      setDiscount(0);
+      setPromoMessage('Invalid promo code. Please try again.');
     }
-  };
-
-  // Quantity adjustment handlers
-  const increaseQuantity = (id) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-    ));
-  };
-
-  const decreaseQuantity = (id) => {
-    setCartItems(cartItems.map(item => 
-      item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-    ));
-  };
-
-  const removeItem = (id) => {
-    setCartItems(cartItems.filter(item => item.id !== id));
   };
 
   return (
@@ -98,20 +82,20 @@ const CartPage = () => {
                       </div>
                       <div className="flex items-center space-x-2">
                         <button 
-                          onClick={() => decreaseQuantity(item.id)}
+                          onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           className="bg-gray-200 p-1 rounded"
                         >
                           <Minus size={16} />
                         </button>
                         <span>{item.quantity}</span>
                         <button 
-                          onClick={() => increaseQuantity(item.id)}
+                          onClick={() => updateQuantity(item._id, item.quantity + 1)}
                           className="bg-gray-200 p-1 rounded"
                         >
                           <Plus size={16} />
                         </button>
                         <button 
-                          onClick={() => removeItem(item.id)}
+                          onClick={() => removeFromCart(item._id)}
                           className="text-red-500 ml-2"
                         >
                           <Trash2 size={16} />
@@ -170,6 +154,11 @@ const CartPage = () => {
                 <p className="text-xs text-gray-500 mt-1">
                   Hint: Try 'UMEED10' for 10% off
                 </p>
+                {promoMessage && (
+                  <p className={`mt-2 text-xs ${discount > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {promoMessage}
+                  </p>
+                )}
               </div>
 
               {/* Checkout Button */}

@@ -8,7 +8,7 @@ import {
   CheckCircle 
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useCart } from '../hooks/useCartContext';
+import { useCart } from '../contexts/useCartContext';
 
 const CartPage = () => {
     const navigate = useNavigate()

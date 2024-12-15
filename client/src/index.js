@@ -18,7 +18,7 @@ import Network from "./pages/test";
 import CheckoutPage from "./pages/Checkout";
 import CartPage from "./pages/Cart";
 import CourseEnrollmentPage from "./pages/CourseEnroll";
-import { CartProvider } from './hooks/useCartContext'; // Make sure this path is correct
+import { CartProvider } from './contexts/useCartContext'; // Make sure this path is correct
 
 const Router = () => {
   const { isLoggedIn } = useAuth(); // Correctly fetch the auth status

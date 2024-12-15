@@ -8,7 +8,7 @@ import {
   CheckCircle2, 
   DollarSign 
 } from 'lucide-react';
-import { useCart } from '../hooks/useCartContext';
+import { useCart } from '../contexts/useCartContext';
 
 
 const CheckoutPage = () => {

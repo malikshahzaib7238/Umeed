@@ -8,7 +8,7 @@ import {
   ChevronDown, Users
 } from 'lucide-react';
 
-import { useCart } from '../hooks/useCartContext';
+import { useCart } from '../contexts/useCartContext';
 
 import { useNavigate } from 'react-router-dom';
 const ProductsPage = () => {

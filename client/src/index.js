@@ -56,7 +56,7 @@ const Router = () => {
       path: "/checkout",
       element: (
         <ProtectedRoute isLoggedIn={isLoggedIn}>
-          <CheckoutPage />
+          <CheckoutPage  />
         </ProtectedRoute>
       ),
     },
@@ -122,8 +122,8 @@ root.render(
   <React.StrictMode>
     <AuthProvider>
       <CartProvider>
-      <Router />
-      <CssBaseline />
+        <Router />
+        <CssBaseline />
       </CartProvider>
     </AuthProvider>
   </React.StrictMode>

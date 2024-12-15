@@ -8,8 +8,13 @@ import {
   CheckCircle2, 
   DollarSign 
 } from 'lucide-react';
+import { useCart } from '../hooks/useCartContext';
+
 
 const CheckoutPage = () => {
+
+  const { cartItems } = useCart();// Access cart items
+
   // Form state
   const [formData, setFormData] = useState({
     fullName: '',
@@ -22,19 +27,19 @@ const CheckoutPage = () => {
   });
 
   // Cart items (would typically come from global state)
-  const [cartItems] = useState([
-    {
-      id: 1,
-      name: "Handwoven Textile Scarf",
-      price: 2500,
-      quantity: 2
-    }
-  ]);
+  // const [cartItems] = useState([
+  //   {
+  //     id: 1,
+  //     name: "Handwoven Textile Scarf",
+  //     price: 2500,
+  //     quantity: 2
+  //   }
+  // ]);
 
   // Order summary calculation
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shippingCost = subtotal > 5000 ? 0 : 250;
-  const total = subtotal + shippingCost;
+  const total =  subtotal + shippingCost; // Use cartTotal if provided
 
   // Form validation state
   const [errors, setErrors] = useState({});
@@ -109,7 +114,7 @@ const CheckoutPage = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Full Name */}
                 <div>
-                  <label className="block mb-2 flex items-center">
+                  <label className=" mb-2 flex items-center">
                     <User size={16} className="mr-2 text-indigo-600" />
                     Full Name
                   </label>
@@ -128,7 +133,7 @@ const CheckoutPage = () => {
 
                 {/* Email */}
                 <div>
-                  <label className="block mb-2 flex items-center">
+                  <label className=" mb-2 flex items-center">
                     <Mail size={16} className="mr-2 text-indigo-600" />
                     Email
                   </label>
@@ -148,7 +153,7 @@ const CheckoutPage = () => {
 
               {/* Phone */}
               <div>
-                <label className="block mb-2 flex items-center">
+                <label className=" mb-2 flex items-center">
                   <Phone size={16} className="mr-2 text-indigo-600" />
                   Phone Number
                 </label>
@@ -167,7 +172,7 @@ const CheckoutPage = () => {
 
               {/* Address */}
               <div>
-                <label className="block mb-2 flex items-center">
+                <label className=" mb-2 flex items-center">
                   <MapPin size={16} className="mr-2 text-indigo-600" />
                   Shipping Address
                 </label>

@@ -21,6 +21,7 @@ const CartPage = () => {
   const [promoCode, setPromoCode] = useState('');
   const [discount, setDiscount] = useState(0);
   const [promoMessage, setPromoMessage] = useState('');
+  const [cartTotal, setCartTotal]=useState(0);
 
   // Calculate totals
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -34,6 +35,7 @@ const CartPage = () => {
     if (promoCode === validPromoCode) {
       const promoDiscount = subtotal * 0.1; // 10% discount
       setDiscount(promoDiscount);
+      setCartTotal(total - discount);
       setPromoMessage(`Promo code applied! You saved ${promoDiscount} PKR.`);
     } else {
       setDiscount(0);
@@ -165,8 +167,9 @@ const CartPage = () => {
               <button 
                 className="w-full bg-green-500 text-white p-3 rounded-full flex items-center justify-center hover:bg-green-600 transition mt-4"
                 disabled={cartItems.length === 0}
+                onClick={()=>navigate("/checkout")}
               >
-                <CheckCircle className="mr-2" onClick={()=>navigate("/checkout")}/>
+                <CheckCircle className="mr-2" />
                 Proceed to Checkout
               </button>
             </div>

@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '../contexts/useCartContext';
 import { useOrder } from "../contexts/useOrderContext";
+import { useAuth } from "../contexts/AuthContext"; // Import useAuth
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../components/Header';
@@ -20,6 +21,9 @@ const CheckoutPage = () => {
   const { cartItems, removeFromCart } = useCart();// Access cart items
   const { addOrder } = useOrder(); // Access order context
   const navigate = useNavigate();
+  const { id: userId } = useAuth(); // Get userId from AuthContext
+  console.log("Use Auth ID: ",userId);
+
 
   // Form state
   const [formData, setFormData] = useState({
@@ -80,25 +84,9 @@ const CheckoutPage = () => {
     if (validateForm()) {
 
 
-      // // Prepare the order details
-      // const newOrder = {
-      //   id: Date.now(), // Unique order ID
-      //   items: cartItems, // Cart items as order details
-      //   date: new Date().toLocaleString(),
-      //   total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250),
-      // };
-
-      // // Add the order to OrderContext
-      // addOrder(newOrder);
-
-      // // Clear the cart
-      // cartItems.forEach((item) => removeFromCart(item._id));
-
-      // console.log("Order confirmed and cart emptied:", newOrder);
-      // alert("Order confirmed successfully!");
-      // navigate('/orders');
-
+      
       const newOrder = {
+        userId,
         items: cartItems.map(item => ({
           id: item._id,
           name: item.name,

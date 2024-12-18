@@ -3,6 +3,11 @@ const mongoose = require('mongoose');
 // Define the order schema
 const orderSchema = new mongoose.Schema({
   
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Account', // Assuming there is a User model
+    required: true,
+  },
   items: [
     {
       id: { type: String, required: true }, // Item ID

@@ -11,6 +11,7 @@ import ProductsPage from "./pages/Products";
 import Login from "./pages/Login";
 import NetworkingPage from "./pages/Netowrking";
 import CoursesPage from "./pages/Courses";
+import OrdersPage from "./pages/Order";
 import ProfileSetupPage from "./pages/Setup";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -18,7 +19,8 @@ import Network from "./pages/test";
 import CheckoutPage from "./pages/Checkout";
 import CartPage from "./pages/Cart";
 import CourseEnrollmentPage from "./pages/CourseEnroll";
-import { CartProvider } from './contexts/useCartContext'; // Make sure this path is correct
+import { CartProvider } from './contexts/useCartContext'; 
+import { OrderProvider } from "./contexts/useOrderContext";
 
 const Router = () => {
   const { isLoggedIn } = useAuth(); // Correctly fetch the auth status
@@ -109,6 +111,14 @@ const Router = () => {
       ),
     },
     {
+      path: "/orders",
+      element: (
+        <ProtectedRoute isLoggedIn={isLoggedIn}>
+          <OrdersPage />
+        </ProtectedRoute>
+      ),
+    },
+    {
       path: "*",
       element: <Welcome />, // Catch-all route redirects to Welcome for safety
     },
@@ -121,10 +131,12 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <AuthProvider>
+      <OrderProvider>
       <CartProvider>
         <Router />
         <CssBaseline />
       </CartProvider>
+      </OrderProvider>
     </AuthProvider>
   </React.StrictMode>
 );

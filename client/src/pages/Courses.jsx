@@ -12,6 +12,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 // Expanded and More Diverse Course Catalog
 
 
@@ -138,13 +139,8 @@ const CoursesPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold flex items-center">
-            <Book className="mr-3" />  امید | Buy Courses
-          </h1>
-        </div>
-      </header>
+
+      <Header/>
       <div className="grid md:grid-cols-4 gap-6 py-12 px-4">
         {/* Advanced Sidebar Filters */}
         <div className="bg-white p-6 rounded-xl shadow-md">

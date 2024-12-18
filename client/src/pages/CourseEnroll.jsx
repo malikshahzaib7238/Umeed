@@ -60,7 +60,7 @@ const CourseEnrollmentPage = ({ course }) => {
       <h2 className="text-2xl font-bold text-indigo-700 mb-4">Personal Information</h2>
 
       <div className="mb-4">
-        <label className="block mb-2 flex items-center">
+        <label className="mb-2 flex items-center">
           <User size={16} className="mr-2 text-indigo-600" />
           Full Name
         </label>
@@ -76,7 +76,7 @@ const CourseEnrollmentPage = ({ course }) => {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 flex items-center">
+        <label className=" mb-2 flex items-center">
           <Mail size={16} className="mr-2 text-indigo-600" />
           Email
         </label>
@@ -92,7 +92,7 @@ const CourseEnrollmentPage = ({ course }) => {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 flex items-center">
+        <label className=" mb-2 flex items-center">
           <Phone size={16} className="mr-2 text-indigo-600" />
           Phone Number
         </label>
@@ -108,7 +108,7 @@ const CourseEnrollmentPage = ({ course }) => {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 flex items-center">
+        <label className=" mb-2 flex items-center">
           <MapPin size={16} className="mr-2 text-indigo-600" />
           Address
         </label>
@@ -145,7 +145,7 @@ const CourseEnrollmentPage = ({ course }) => {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-2 flex items-center">
+        <label className=" mb-2 flex items-center">
           <CreditCard size={16} className="mr-2 text-indigo-600" />
           Payment Transaction ID
         </label>

@@ -8,6 +8,7 @@ import Footer from '../components/Footer';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
+import Header from '../components/Header';
 function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
@@ -207,7 +208,8 @@ const NetworkingPage = () => {
   return (
     <>
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
-    <header className="bg-indigo-700 text-white p-6 shadow-md flex justify-between items-center">
+      <Header/>
+    {/* <header className="bg-indigo-700 text-white p-6 shadow-md flex justify-between items-center">
           <div className="container mx-auto flex justify-between items-center">
             <h1 className="text-2xl font-bold flex items-center">
               <Users className="mr-3" /> امید | Professional Network
@@ -232,7 +234,7 @@ const NetworkingPage = () => {
               )}
             </div>
           </div>
-        </header>
+        </header> */}
 
       <main className="container mx-auto py-12 px-4">
         {/* Search and Filter Section */}

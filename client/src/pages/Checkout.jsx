@@ -68,7 +68,7 @@ const CheckoutPage = () => {
   };
 
   // Handle form submission
-  const handleConfirmOrder = (e) => {
+  const handleConfirmOrder = async (e) => {
 
     e.preventDefault();
 
@@ -80,23 +80,59 @@ const CheckoutPage = () => {
     if (validateForm()) {
 
 
-      // Prepare the order details
+      // // Prepare the order details
+      // const newOrder = {
+      //   id: Date.now(), // Unique order ID
+      //   items: cartItems, // Cart items as order details
+      //   date: new Date().toLocaleString(),
+      //   total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250),
+      // };
+
+      // // Add the order to OrderContext
+      // addOrder(newOrder);
+
+      // // Clear the cart
+      // cartItems.forEach((item) => removeFromCart(item._id));
+
+      // console.log("Order confirmed and cart emptied:", newOrder);
+      // alert("Order confirmed successfully!");
+      // navigate('/orders');
+
       const newOrder = {
-        id: Date.now(), // Unique order ID
-        items: cartItems, // Cart items as order details
+        items: cartItems.map(item => ({
+          id: item._id,
+          name: item.name,
+          price: item.price,
+          quantity: item.quantity,
+        })),
         date: new Date().toLocaleString(),
-        total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250),
+        total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250), // Adjust if needed
       };
 
-      // Add the order to OrderContext
-      addOrder(newOrder);
-
-      // Clear the cart
-      cartItems.forEach((item) => removeFromCart(item._id));
-
-      console.log("Order confirmed and cart emptied:", newOrder);
-      alert("Order confirmed successfully!");
-      navigate('/orders');
+      console.log("NewOrder: ", newOrder);
+  
+      try {
+        // Send the new order to the server
+        const response = await fetch('http://localhost:8080/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newOrder),
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to confirm the order");
+        }
+  
+        // Clear the cart after successful submission
+        cartItems.forEach((item) => removeFromCart(item.id));
+  
+        console.log("Order confirmed and saved to DB:", newOrder);
+        alert("Order confirmed successfully!");
+        navigate('/orders');
+      } catch (error) {
+        console.error("Error confirming order:", error);
+        alert("There was an error confirming your order. Please try again.");
+      }
     }
 
   };

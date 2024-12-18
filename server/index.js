@@ -7,6 +7,7 @@ const Message = require('./models/Message');
 const authRoutes = require('./routes/auth');
 const networkRoutes = require('./routes/network');
 const productRoutes = require('./routes/product');
+const orderRoutes = require('./routes/order');
 const courseRoutes = require('./routes/course');
 const setupRoutes = require('./routes/setup');
 const cors = require('cors');
@@ -102,6 +103,7 @@ async function bootstrap() {
   app.use('/auth', authRoutes);
   app.use('/network', networkRoutes);
   app.use('/sell/product',productRoutes);
+  app.use('/order',orderRoutes);
   app.use('/sell/course', courseRoutes);
   app.use('/setup/', setupRoutes);
 

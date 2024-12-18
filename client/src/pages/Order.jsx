@@ -1,10 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
-import { useOrder } from '../contexts/useOrderContext';
+
 import { DollarSign, ShoppingCart, Calendar } from 'lucide-react';
 
 const Order = () => {
-  const { orders } = useOrder();
+  const [orders, setOrders] = useState([]);
+
+  const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
+
+  // Fetch Orders from DB 
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/order');
+        if (!response.ok) {
+          throw new Error("Failed to fetch orders");
+        }
+        const data = await response.json();
+        // Process orders to include placeholder images if missing
+        const processedOrders = Array.isArray(data) // Ensure we have an array of orders
+        ? data.map(order => ({
+            ...order,
+            items: order.items.map(item => ({
+              ...item,
+              image: item.image ? item.image : placeholderImage, // Assign dummy image if image is null or undefined
+            })),
+          }))
+        : [];
+
+      setOrders(processedOrders); // Update state with processed orders
+
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        alert("Failed to load orders. Please try again.");
+      }
+    };
+
+    fetchOrders();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq">

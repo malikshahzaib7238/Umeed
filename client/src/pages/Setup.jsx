@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import Footer from "../components/Footer";
 import { useAuth } from "../contexts/AuthContext";
+import Header from "../components/Header";
 const ProfileSetupPage = () => {
   const [profile, setProfile] = useState({
     username: "",
@@ -71,13 +72,15 @@ profile.id= id;
   return (
     <>
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
+      {/* <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
             <User className="mr-3" /> امید | Profile Setup
           </h1>
         </div>
-      </header>
+      </header> */}
+
+      <Header/>
 
       <main className="container mx-auto py-12 px-4">
         <form

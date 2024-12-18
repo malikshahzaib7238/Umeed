@@ -11,6 +11,7 @@ import {
 import { useCart } from '../contexts/useCartContext';
 
 import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
 const ProductsPage = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
@@ -119,13 +120,14 @@ const ProductsPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
+      {/* <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
             <ShoppingCart className="mr-3" />  امید | Buy Products
           </h1>
         </div>
-      </header>
+      </header> */}
+      <Header/>
 
       <div classname="container mx-auto py-12 px-4">
         <div className="grid md:grid-cols-4 gap-6 py-12 px-4" >

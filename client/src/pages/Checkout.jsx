@@ -1,19 +1,25 @@
 import React, { useState } from 'react';
-import { 
-  CreditCard, 
-  MapPin, 
-  User, 
-  Mail, 
-  Phone, 
-  CheckCircle2, 
-  DollarSign 
+import {
+  CreditCard,
+  MapPin,
+  User,
+  Mail,
+  Phone,
+  CheckCircle2,
+  DollarSign
 } from 'lucide-react';
 import { useCart } from '../contexts/useCartContext';
+import { useOrder } from "../contexts/useOrderContext";
+import { useNavigate } from 'react-router-dom';
+
+import Header from '../components/Header';
 
 
 const CheckoutPage = () => {
 
-  const { cartItems } = useCart();// Access cart items
+  const { cartItems, removeFromCart } = useCart();// Access cart items
+  const { addOrder } = useOrder(); // Access order context
+  const navigate = useNavigate();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -26,20 +32,11 @@ const CheckoutPage = () => {
     paymentMethod: 'cash'
   });
 
-  // Cart items (would typically come from global state)
-  // const [cartItems] = useState([
-  //   {
-  //     id: 1,
-  //     name: "Handwoven Textile Scarf",
-  //     price: 2500,
-  //     quantity: 2
-  //   }
-  // ]);
 
   // Order summary calculation
   const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
   const shippingCost = subtotal > 5000 ? 0 : 250;
-  const total =  subtotal + shippingCost; // Use cartTotal if provided
+  const total = subtotal + shippingCost; // Use cartTotal if provided
 
   // Form validation state
   const [errors, setErrors] = useState({});
@@ -56,11 +53,11 @@ const CheckoutPage = () => {
   // Validate form
   const validateForm = () => {
     const newErrors = {};
-    
+
     if (!formData.fullName.trim()) newErrors.fullName = "Full name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = "Email is invalid";
-    
+
     if (!formData.phone.trim()) newErrors.phone = "Phone number is required";
     if (!formData.address.trim()) newErrors.address = "Address is required";
     if (!formData.city.trim()) newErrors.city = "City is required";
@@ -71,46 +68,51 @@ const CheckoutPage = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleConfirmOrder = (e) => {
+
     e.preventDefault();
-    
+
+    if (cartItems.length === 0) {
+      alert("Your cart is empty!");
+      return;
+    }
+
     if (validateForm()) {
-      // Prepare order data
-      const orderData = {
-        ...formData,
-        items: cartItems,
-        total,
-        orderDate: new Date().toISOString()
+
+
+      // Prepare the order details
+      const newOrder = {
+        id: Date.now(), // Unique order ID
+        items: cartItems, // Cart items as order details
+        date: new Date().toLocaleString(),
+        total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250),
       };
 
-      // Simulated order submission
-      try {
-        // In a real app, this would be an API call
-        console.log("Order Submitted:", orderData);
-        alert("Order placed successfully! Thank you for your purchase.");
-      } catch (error) {
-        console.error("Order submission failed:", error);
-        alert("Order submission failed. Please try again.");
-      }
+      // Add the order to OrderContext
+      addOrder(newOrder);
+
+      // Clear the cart
+      cartItems.forEach((item) => removeFromCart(item._id));
+
+      console.log("Order confirmed and cart emptied:", newOrder);
+      alert("Order confirmed successfully!");
+      navigate('/orders');
     }
+
   };
+
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold flex items-center">
-            <CreditCard className="mr-3" /> امید | Checkout
-          </h1>
-        </div>
-      </header>
+
+      <Header />
 
       <div className="container mx-auto py-12 px-4">
         <div className="grid md:grid-cols-3 gap-6">
           {/* Checkout Form */}
           <div className="md:col-span-2 bg-white rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-bold mb-6">Shipping Information</h2>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleConfirmOrder} className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
                 {/* Full Name */}
                 <div>
@@ -241,7 +243,7 @@ const CheckoutPage = () => {
           {/* Order Summary */}
           <div className="bg-white rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-            
+
             {cartItems.map(item => (
               <div key={item.id} className="flex justify-between mb-2">
                 <span>{item.name} x {item.quantity}</span>
@@ -266,8 +268,8 @@ const CheckoutPage = () => {
               </div>
             </div>
 
-            <button 
-              onClick={handleSubmit}
+            <button
+              onClick={handleConfirmOrder}
               className="w-full bg-green-500 text-white p-3 rounded-full flex items-center justify-center hover:bg-green-600 transition mt-6"
             >
               <CheckCircle2 className="mr-2" />

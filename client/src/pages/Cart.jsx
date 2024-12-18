@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../contexts/useCartContext';
+import Header from '../components/Header';
 
 const CartPage = () => {
     const navigate = useNavigate()
@@ -45,13 +46,7 @@ const CartPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
-        <div className="container mx-auto">
-          <h1 className="text-2xl font-bold flex items-center">
-            <ShoppingCart className="mr-3" /> امید | Your Cart
-          </h1>
-        </div>
-      </header>
+      <Header/>
 
       <div className="container mx-auto py-12 px-4">
         <div className="grid md:grid-cols-3 gap-6">

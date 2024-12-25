@@ -27,7 +27,10 @@ export default function Header() {
 
         const Icon = route.icon;
         return (
-            <h1 className="text-2xl font-bold flex items-center">
+            <h1 
+                className="text-2xl font-bold flex items-center cursor-pointer" 
+                onClick={() => navigate("/")} 
+            >
                 <Icon className="mr-3" />{route.text}
             </h1>
         );

@@ -90,6 +90,7 @@ const CheckoutPage = () => {
           name: item.name,
           price: item.price,
           quantity: item.quantity,
+          image: item.image
         })),
         date: new Date().toLocaleString(),
         total: cartItems.reduce((sum, item) => sum + item.price * item.quantity, 250), // Adjust if needed

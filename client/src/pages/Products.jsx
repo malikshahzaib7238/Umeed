@@ -39,7 +39,7 @@ const ProductsPage = () => {
         console.log("Fetched Products Data: ", data);
         const fetchedProducts = data.products.map(product => ({
           ...product,
-          image: product.image ? product.image : placeholderImage, // Use dummy image if image is null
+          image: product.image ? `http://localhost:8080${product.image}` : placeholderImage, // Use dummy image if image is null
         }));
         setAllProducts(fetchedProducts);
         setProducts(fetchedProducts);

@@ -101,7 +101,7 @@ const WelcomePage = () => {
             <div className="absolute inset-0 bg-[#F5DEB3] opacity-40 z-0"></div>
 
             {/* Footer */}
-            <footer className="relative z-10 bg-[#C19A6B] bg-opacity-90 py-6">
+            <footer className="relative z-10 bg-[#C19A6B] bg-opacity-90 py-7">
                 <div className="container mx-auto text-center">
                     <p className="text-[#4A2511]">
                         © 2024 امید | Umeed. Empowering Rural Women Entrepreneurs of Sindh

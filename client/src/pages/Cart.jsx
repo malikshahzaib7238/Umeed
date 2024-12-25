@@ -13,7 +13,7 @@ import Header from '../components/Header';
 const CartPage = () => {
     const navigate = useNavigate();
     const { cartItems, removeFromCart, updateQuantity } = useCart();
-    const [promoCode, setPromoCode] = useState('');
+    // const [promoCode, setPromoCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [promoMessage, setPromoMessage] = useState('');
     const [cartTotal, setCartTotal] = useState(0);
@@ -22,18 +22,18 @@ const CartPage = () => {
     const shippingCost = subtotal > 5000 ? 0 : 250;
     const total = subtotal + shippingCost - discount;
 
-    const applyPromoCode = () => {
-        const validPromoCode = 'UMEED10';
-        if (promoCode === validPromoCode) {
-            const promoDiscount = subtotal * 0.1;
-            setDiscount(promoDiscount);
-            setCartTotal(total - discount);
-            setPromoMessage(`Promo code applied! You saved ${promoDiscount} PKR.`);
-        } else {
-            setDiscount(0);
-            setPromoMessage('Invalid promo code. Please try again.');
-        }
-    };
+    // const applyPromoCode = () => {
+    //     const validPromoCode = 'UMEED10';
+    //     if (promoCode === validPromoCode) {
+    //         const promoDiscount = subtotal * 0.1;
+    //         setDiscount(promoDiscount);
+    //         setCartTotal(total - discount);
+    //         setPromoMessage(`Promo code applied! You saved ${promoDiscount} PKR.`);
+    //     } else {
+    //         setDiscount(0);
+    //         setPromoMessage('Invalid promo code. Please try again.');
+    //     }
+    // };
 
     return (
         <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
@@ -122,7 +122,7 @@ const CartPage = () => {
                             </div>
 
                             {/* Promo Code Section */}
-                            <div className="mt-4">
+                            {/* <div className="mt-4">
                                 <label className="block mb-2 text-[#4A2511]">Promo Code</label>
                                 <div className="flex space-x-2">
                                     <input
@@ -147,7 +147,7 @@ const CartPage = () => {
                                         {promoMessage}
                                     </p>
                                 )}
-                            </div>
+                            </div> */}
 
                             {/* Checkout Button */}
                             <button

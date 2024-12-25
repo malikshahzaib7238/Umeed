@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 
 const AuthPage = () => {
-  const { login, register, setUser } = useAuth(); // Add setUser
+  const { login, register, setUser } = useAuth();
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +18,7 @@ const AuthPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevState) => ({
+    setFormData(prevState => ({
       ...prevState,
       [name]: value
     }));
@@ -32,7 +32,7 @@ const AuthPage = () => {
     try {
       if (isLogin) {
         const user = await login({ username: formData.username, password: formData.password });
-        setUser(user); // Set user in context
+        setUser(user);
         navigate('/');
       } else {
         if (formData.password !== formData.confirmPassword) {
@@ -42,7 +42,7 @@ const AuthPage = () => {
           username: formData.username,
           password: formData.password
         });
-        setUser(user); // Set user in context
+        setUser(user);
         navigate('/');
       }
     } catch (err) {
@@ -53,14 +53,32 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center font-noto-nastaliq">
-      <div className="w-full max-w-md">
-        <div className="bg-white shadow-xl rounded-xl border border-gray-100 p-8">
-          <div className="text-center mb-6">
-            <h1 className="text-3xl font-bold text-indigo-700 mb-2">
+    <div className="relative min-h-screen bg-gray-50 flex items-center justify-center font-noto-nastaliq">
+      {/* Background Video */}
+      <video
+        autoPlay
+        loop
+        muted
+        className="absolute top-0 left-0 w-full h-full object-cover"
+      >
+        <source
+          src="/bgvid1.mp4"
+          type="video/mp4"
+        />
+        Your browser does not support the video tag.
+      </video>
+
+      {/* Semi-transparent overlay */}
+      <div className="absolute inset-0 bg-[#F5DEB3] opacity-40"></div>
+
+      {/* Main Content */}
+      <div className="relative z-10 w-full max-w-md px-4">
+        <div className="bg-[#F5DEB3] bg-opacity-90 shadow-xl rounded-xl border-2 border-[#8B4513] p-8">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-[#4A2511] mb-2">
               امید | Umeed
             </h1>
-            <p className="text-gray-600">
+            <p className="text-[#6B3410]">
               {isLogin
                 ? 'Welcome back! Please login to your account'
                 : 'Create a new account to join our community'}
@@ -71,7 +89,7 @@ const AuthPage = () => {
             <div className="relative">
               <label htmlFor="username" className="sr-only">Username</label>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Users className="text-gray-400" size={20} />
+                <Users className="text-[#8B4513]" size={20} />
               </div>
               <input
                 type="text"
@@ -81,7 +99,7 @@ const AuthPage = () => {
                 value={formData.username}
                 onChange={handleChange}
                 placeholder="Username"
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-10 pr-4 py-2 bg-white bg-opacity-80 border-2 border-[#8B4513] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B3410]"
               />
             </div>
 
@@ -89,7 +107,7 @@ const AuthPage = () => {
               <div className="relative">
                 <label htmlFor="email" className="sr-only">Email</label>
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="text-gray-400" size={20} />
+                  <Mail className="text-[#8B4513]" size={20} />
                 </div>
                 <input
                   type="email"
@@ -98,7 +116,7 @@ const AuthPage = () => {
                   required
                   onChange={handleChange}
                   placeholder="Email"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 bg-white bg-opacity-80 border-2 border-[#8B4513] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B3410]"
                 />
               </div>
             )}
@@ -106,7 +124,7 @@ const AuthPage = () => {
             <div className="relative">
               <label htmlFor="password" className="sr-only">Password</label>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="text-gray-400" size={20} />
+                <Lock className="text-[#8B4513]" size={20} />
               </div>
               <input
                 type={showPassword ? 'text' : 'password'}
@@ -116,7 +134,7 @@ const AuthPage = () => {
                 value={formData.password}
                 onChange={handleChange}
                 placeholder="Password"
-                className="w-full pl-10 pr-10 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full pl-10 pr-10 py-2 bg-white bg-opacity-80 border-2 border-[#8B4513] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B3410]"
               />
               <button
                 type="button"
@@ -124,9 +142,9 @@ const AuthPage = () => {
                 className="absolute inset-y-0 right-0 pr-3 flex items-center"
               >
                 {showPassword ? (
-                  <Eye className="text-gray-400" size={20} />
+                  <Eye className="text-[#8B4513]" size={20} />
                 ) : (
-                  <EyeOff className="text-gray-400" size={20} />
+                  <EyeOff className="text-[#8B4513]" size={20} />
                 )}
               </button>
             </div>
@@ -135,7 +153,7 @@ const AuthPage = () => {
               <div className="relative">
                 <label htmlFor="confirmPassword" className="sr-only">Confirm Password</label>
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="text-gray-400" size={20} />
+                  <Lock className="text-[#8B4513]" size={20} />
                 </div>
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -145,30 +163,30 @@ const AuthPage = () => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   placeholder="Confirm Password"
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full pl-10 pr-4 py-2 bg-white bg-opacity-80 border-2 border-[#8B4513] rounded-md focus:outline-none focus:ring-2 focus:ring-[#6B3410]"
                 />
               </div>
             )}
 
             <button
               type="submit"
-              className="w-full bg-indigo-600 text-white py-2 rounded-md hover:bg-indigo-700 transition duration-300"
+              className="w-full bg-[#8B4513] text-white py-2 rounded-md hover:bg-[#6B3410] transition duration-300"
               disabled={loading}
             >
               {loading ? 'Loading...' : isLogin ? 'Login' : 'Register'}
             </button>
 
-            {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+            {error && <p className="text-red-700 text-sm text-center mt-2">{error}</p>}
           </form>
 
           <div className="text-center mt-6">
-            <p className="text-gray-600">
+            <p className="text-[#4A2511]">
               {isLogin
                 ? "Don't have an account? "
                 : 'Already have an account? '}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="text-indigo-600 hover:underline"
+                className="text-[#6B3410] hover:underline font-semibold"
               >
                 {isLogin ? 'Register' : 'Login'}
               </button>
@@ -176,8 +194,8 @@ const AuthPage = () => {
           </div>
         </div>
 
-        <footer className="text-center mt-4 text-gray-600">
-          <p>© 2024 امید | Umeed. Empowering Rural Women Entrepreneurs</p>
+        <footer className="text-center mt-4 text-[#4A2511]">
+          <p>© 2024 امید | Umeed. Empowering Rural Women Entrepreneurs of Sindh</p>
         </footer>
       </div>
     </div>

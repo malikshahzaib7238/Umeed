@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios"; // Ensure axios is installed via npm install axios
 import {
-  User,
   MapPin,
   Edit,
   Save,
@@ -20,10 +19,10 @@ const ProfileSetupPage = () => {
     skills: [],
     mentorAvailable: false,
   });
-  const { account,token, id } = useAuth();
+  const { id } = useAuth();
 
   const [skillInput, setSkillInput] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -71,7 +70,7 @@ profile.id= id;
 
   return (
     <>
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       {/* <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
@@ -88,7 +87,7 @@ profile.id= id;
           className="bg-white shadow-md rounded-xl p-8 max-w-2xl mx-auto"
         >
           <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center">
-            <Edit className="mr-3 text-indigo-600" />
+            <Edit className="mr-3 text-[#F5DEB3]" />
             Set Up Your Profile
           </h2>
 
@@ -158,7 +157,7 @@ profile.id= id;
               Location
             </label>
             <div className="flex items-center">
-              <MapPin className="mr-2 text-indigo-600" />
+              <MapPin className="mr-2 text-[#F5DEB3]" />
               <input
                 type="text"
                 id="location"
@@ -166,7 +165,7 @@ profile.id= id;
                 value={profile.location}
                 onChange={handleInputChange}
                 required
-                className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
+                className="flex-grow px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:[#F5DEB3]"
                 placeholder="City, Province"
               />
             </div>
@@ -184,7 +183,7 @@ profile.id= id;
               onChange={handleInputChange}
               required
               rows="4"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-[#F5DEB3]"
               placeholder="Tell us a bit about yourself, your professional journey, and aspirations"
             ></textarea>
           </div>
@@ -201,13 +200,13 @@ profile.id= id;
                 value={skillInput}
                 onChange={(e) => setSkillInput(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && addSkill()}
-                className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-indigo-500"
+                className="flex-grow px-4 py-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-[#F5DEB3]"
                 placeholder="Add a skill (Press Enter to add)"
               />
               <button
                 type="button"
                 onClick={addSkill}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-r-md hover:bg-indigo-700"
+                className="bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded-r-md hover:bg-[#6B3410] transition-colors"
               >
                 Add
               </button>
@@ -218,7 +217,7 @@ profile.id= id;
               {profile.skills.map(skill => (
                 <span
                   key={skill}
-                  className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-sm flex items-center"
+                  className="bg-indigo-100 text-[#4A2511] px-3 py-1 rounded-full text-sm flex items-center"
                 >
                   {skill}
                   <button
@@ -240,7 +239,7 @@ profile.id= id;
                 name="mentorAvailable"
                 checked={profile.mentorAvailable}
                 onChange={handleInputChange}
-                className="mr-2 h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                className="mr-2 h-4 w-4 text-[#F5DEB3] focus:ring-indigo-500 border-gray-300 rounded"
               />
               <span className="text-gray-700">
                 I'm interested in being a mentor
@@ -251,7 +250,7 @@ profile.id= id;
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 text-white py-3 rounded-md hover:bg-indigo-700 transition flex items-center justify-center"
+            className="w-full bg-[#8B4513] text-[#F5DEB3] py-3 rounded-md hover:bg-[#6B3410] transition-colors flex items-center justify-center"
           >
             <Save className="mr-2" />
             Save Profile

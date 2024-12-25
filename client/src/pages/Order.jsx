@@ -47,7 +47,7 @@ const Order = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       <Header />
 
       {/* Title */}
@@ -72,10 +72,10 @@ const Order = () => {
               >
                 {/* Order Header */}
                 <div className="flex items-center justify-between mb-4">
-                  <h2 className="text-lg font-bold text-indigo-700">
+                  <h2 className="text-lg font-bold text-[#4A2511]">
                     Order #{order.id || index + 1}
                   </h2>
-                  <ShoppingCart size={20} className="text-indigo-700" />
+                  <ShoppingCart size={20} className="text-[#4A2511]" />
                 </div>
 
                 {/* Date & Time of the Order */}

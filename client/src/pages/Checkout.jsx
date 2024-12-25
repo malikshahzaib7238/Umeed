@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import {
-  CreditCard,
   MapPin,
   User,
   Mail,
   Phone,
-  CheckCircle2,
-  DollarSign
+  CheckCircle2
 } from 'lucide-react';
 import { useCart } from '../contexts/useCartContext';
 import { useOrder } from "../contexts/useOrderContext";
@@ -127,7 +125,7 @@ const CheckoutPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
 
       <Header />
 

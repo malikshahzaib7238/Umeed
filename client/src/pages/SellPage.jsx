@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Users, ShoppingBag, BookOpen, ImagePlus } from 'lucide-react';
+import {ShoppingBag, BookOpen, ImagePlus } from 'lucide-react';
 import Header from '../components/Header';
 
 const SellPage = () => {
@@ -139,18 +139,18 @@ const SellPage = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       <Header/>
       <div className="container mx-auto py-12 px-4">
-        <h1 className="text-3xl font-bold text-indigo-700 mb-8">What Would You Like to Sell?</h1>
+        <h1 className="text-3xl font-bold text-[#4A2511] mb-8">What Would You Like to Sell?</h1>
 
         {!selectedType && (
           <div className="grid md:grid-cols-2 gap-6">
             <button
               onClick={() => handleTypeSelection('product')}
-              className="bg-white border-2 border-indigo-200 p-6 rounded-xl hover:shadow-lg transition flex items-center space-x-4"
+              className="bg-white border-2 border-indigo-200 p-6 rounded-xl hover:shadow-lg transition flex items-start space-x-2"
             >
-              <ShoppingBag size={40} className="text-indigo-600" />
+              <ShoppingBag size={40} className="text-[#4A2511] w-" />
               <div>
                 <h2 className="text-xl font-semibold">Handmade Products</h2>
                 <p className="text-gray-600">Sell your crafts, artworks, and traditional items</p>
@@ -161,7 +161,7 @@ const SellPage = () => {
               onClick={() => handleTypeSelection('course')}
               className="bg-white border-2 border-indigo-200 p-6 rounded-xl hover:shadow-lg transition flex items-center space-x-4"
             >
-              <BookOpen size={40} className="text-indigo-600" />
+              <BookOpen size={40} className="text-[#4A2511]" />
               <div>
                 <h2 className="text-xl font-semibold">Skill Development Courses</h2>
                 <p className="text-gray-600">Share your expertise and teach skills</p>
@@ -172,7 +172,7 @@ const SellPage = () => {
 
         {selectedType === 'product' && (
           <form onSubmit={handleSubmit} method='POST' className="bg-white p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-indigo-700">List Your Handmade Product</h2>
+            <h2 className="text-2xl font-bold mb-6 text-[#4A2511]">List Your Handmade Product</h2>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -236,7 +236,7 @@ const SellPage = () => {
                   />
                   <label
                     htmlFor="product-image"
-                    className="flex items-center space-x-2 bg-indigo-100 text-indigo-700 px-4 py-2 rounded cursor-pointer"
+                    className="flex items-center space-x-2 bg-indigo-100 text-[#4A2511] px-4 py-2 rounded cursor-pointer"
                   >
                     <ImagePlus size={20} />
                     <span>Upload Image</span>
@@ -250,7 +250,7 @@ const SellPage = () => {
 
             <button
               type="submit"
-              className="mt-6 w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700 transition"
+              className="mt-6 w-full bg-[#8B4513] text-[#F5DEB3] py-3 rounded hover:bg-[#6B3410] transition-colors"
             >
               List Product
             </button>
@@ -259,7 +259,7 @@ const SellPage = () => {
 
         {selectedType === 'course' && (
           <form onSubmit={handleSubmit} className="bg-white p-8 rounded-xl shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-indigo-700">Create Your Skill Course</h2>
+            <h2 className="text-2xl font-bold mb-6 text-[#4A2511]">Create Your Skill Course</h2>
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
@@ -328,7 +328,7 @@ const SellPage = () => {
 
             <button
               type="submit"
-              className="mt-6 w-full bg-indigo-600 text-white py-3 rounded hover:bg-indigo-700 transition"
+              className="mt-6 w-full bg-[#8B4513] text-[#F5DEB3] py-3 rounded hover:bg-[#6B3410] transition-colors"
             >
               Create Course
             </button>

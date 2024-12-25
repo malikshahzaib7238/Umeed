@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Users, MessageCircle, Award, Globe, Filter, Search,
-  MapPin, Briefcase, Share2, CheckCircle, X, LogOut, UserCircle
+  MessageCircle, Award, Search,
+  MapPin, CheckCircle, X
 } from 'lucide-react';
 import io from 'socket.io-client';
 import Footer from '../components/Footer';
@@ -13,14 +13,13 @@ function capitalizeFirstLetter(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 const NetworkingPage = () => {
-  const { logout, account, id } = useAuth();
+  const { account, id } = useAuth();
   const navigate = useNavigate();
   const [filters, setFilters] = useState({
     location: '',
     expertise: '',
     mentorOnly: false
   });
-  const [showDropdown, setShowDropdown] = useState(false);
   const [networkData, setNetworkData] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredNetwork, setFilteredNetwork] = useState([]);
@@ -174,14 +173,12 @@ const NetworkingPage = () => {
   const sendMessage = () => {
     if (!newMessage.trim() || !socket || !activeChatId) return;
 
-    // Emit message through socket
     socket.emit('send_message', {
       senderId: account?._id,
       receiverId: activeChatId,
       content: newMessage
     });
 
-    // Optimistically update chat
     setChats(prevChats => ({
       ...prevChats,
       [activeChatId]: [
@@ -207,7 +204,7 @@ const NetworkingPage = () => {
 
   return (
     <>
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       <Header/>
 
       <main className="container mx-auto py-12 px-4">
@@ -228,7 +225,7 @@ const NetworkingPage = () => {
               onClick={() => setFilters(prev => ({...prev, mentorOnly: !prev.mentorOnly}))}
               className={`px-4 py-2 rounded-md flex items-center space-x-2 ${
                 filters.mentorOnly
-                  ? 'bg-indigo-600 text-white'
+                  ? 'bg-[#8B4513] text-white'
                   : 'bg-gray-200 text-gray-700'
               }`}
             >
@@ -262,19 +259,16 @@ const NetworkingPage = () => {
                 <div className="flex space-x-2">
                   <button
                     onClick={() => startChat(profile.id)}
-                    className="bg-indigo-100 text-indigo-600 p-2 rounded-full hover:bg-indigo-200"
+                    className="bg-[#8B4513] text-[#F5DEB3] p-2 rounded-full hover:bg-[#8B4513]"
                   >
                     <MessageCircle size={20} />
-                  </button>
-                  <button className="bg-indigo-100 text-indigo-600 p-2 rounded-full hover:bg-indigo-200">
-                    <Share2 size={20} />
                   </button>
                 </div>
               </div>
 
               <div className="space-y-3">
                 <div className="flex items-center text-gray-600">
-                  <MapPin size={20} className="mr-2 text-indigo-600" />
+                  <MapPin size={20} className="mr-2 text-[#4A2511]" />
                   <span>{profile.location}</span>
                 </div>
 
@@ -308,11 +302,11 @@ const NetworkingPage = () => {
       {/* Chat Window */}
       {activeChatId && (
         <div className="fixed bottom-4 right-4 w-96 bg-white rounded-xl shadow-2xl border">
-          <div className="bg-indigo-700 text-white p-4 rounded-t-xl flex justify-between items-center">
+          <div className="bg-[#8B4513] text-white p-4 rounded-t-xl flex justify-between items-center">
             <h3 className="text-lg font-bold">
               {networkData.find(p => p.id === activeChatId).name}
             </h3>
-            <button onClick={closeChat} className="hover:bg-indigo-600 p-1 rounded-full">
+            <button onClick={closeChat} className="hover:bg-[#8B4513] p-1 rounded-full">
               <X size={20} />
             </button>
           </div>
@@ -331,7 +325,7 @@ const NetworkingPage = () => {
                   inline-block px-4 py-2 rounded-xl max-w-[80%]
                   ${
                     message.sender === 'You'
-                      ? 'bg-indigo-500 text-white'
+                      ? 'bg-[#8B4513] text-white'
                       : 'bg-gray-200 text-gray-800'
                   }
                 `}>
@@ -348,11 +342,11 @@ const NetworkingPage = () => {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="flex-grow p-2 border rounded-l-md focus:outline-none focus:ring-2 focus:[#F5DEB3]"
             />
             <button
               onClick={sendMessage}
-              className="bg-indigo-600 text-white px-4 py-2 rounded-r-md hover:bg-indigo-700"
+              className="bg-[#8B4513] text-white px-4 py-2 rounded-r-md hover:bg-[#8B4513]"
             >
               Send
             </button>

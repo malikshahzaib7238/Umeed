@@ -1,136 +1,94 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, LogOut, UserCircle, Users, ShoppingBag, Book, User, CreditCard, ShoppingBasket } from 'lucide-react';
-
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from "../contexts/AuthContext";
 
-
-
 export default function Header() {
-
-    const { logout, account, id } = useAuth();
+    const { logout, account } = useAuth();
     const navigate = useNavigate();
     const [showDropdown, setShowDropdown] = useState(false);
-    const location = useLocation(); // Hook to get current route
+    const location = useLocation();
 
-
-    // Function to determine the title based on the route
     const getTitle = () => {
-        switch (location.pathname) {
-            case "/":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <Users className="mr-3" />امید | Umeed 
-                    </h1>
-                );
-            case "/network":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <Users className="mr-3" /> امید | Professional Network
-                    </h1>
-                );
-            case "/products":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <ShoppingCart className="mr-3" />  امید | Buy Products
-                    </h1>
-                );
-            case "/sell":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <ShoppingBag className="mr-3" />  امید | Selling Platform
-                    </h1>
-                );
-            case "/courses":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <Book className="mr-3" />  امید | Buy Courses
-                    </h1>
-                );
-            case "/cart":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <ShoppingCart className="mr-3" />  امید |  Your Cart
-                    </h1>
-                );
-            case "/setup":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <User className="mr-3" />  امید |  Profile Setup
-                    </h1>
-                );
-            case "/checkout":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <CreditCard className="mr-3" /> امید | Checkout
-                    </h1>
-                );
-            case "/orders":
-                return (
-                    <h1 className="text-2xl font-bold flex items-center">
-                        <ShoppingBasket className="mr-3" /> امید | Your Orders
-                    </h1>
-                );
-        }
+        const titles = {
+            "/": { icon: Users, text: "امید | Umeed" },
+            "/network": { icon: Users, text: "امید | Professional Network" },
+            "/products": { icon: ShoppingCart, text: "امید | Buy Products" },
+            "/sell": { icon: ShoppingBag, text: "امید | Selling Platform" },
+            "/courses": { icon: Book, text: "امید | Buy Courses" },
+            "/cart": { icon: ShoppingCart, text: "امید | Your Cart" },
+            "/setup": { icon: User, text: "امید | Profile Setup" },
+            "/checkout": { icon: CreditCard, text: "امید | Checkout" },
+            "/orders": { icon: ShoppingBasket, text: "امید | Your Orders" }
+        };
+
+        const route = titles[location.pathname];
+        if (!route) return null;
+
+        const Icon = route.icon;
+        return (
+            <h1 className="text-2xl font-bold flex items-center">
+                <Icon className="mr-3" />{route.text}
+            </h1>
+        );
     };
 
-
     return (
-        <header className="bg-indigo-700 text-white p-6 shadow-md">
+        <header className="bg-[#C19A6B] bg-opacity-90 text-[#4A2511] p-6 shadow-md">
             <div className="container mx-auto flex justify-between items-center">
                 {getTitle()}
                 <nav className="space-x-4">
                     {account?.username ? (
                         <div className="relative">
-                            <div className="flex flex-row">
+                            <div className="flex flex-row gap-4">
                                 <button
                                     onClick={() => setShowDropdown(!showDropdown)}
-                                    className="flex items-center bg-white text-indigo-700 px-4 py-2 mr-4 rounded-md hover:bg-gray-100"
+                                    className="flex items-center bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded-md hover:bg-[#6B3410] transition-colors"
                                 >
                                     <UserCircle className="mr-2" />
-                                    <span className="hidden md:inline">{account?.username || "Username"}</span>
+                                    <span className="hidden md:inline">{account.username}</span>
                                 </button>
 
-                                {/* View Cart Button */}
                                 <button
-                                    onClick={() => navigate("/cart")} // Adjust route if needed
-                                    className="flex items-center bg-white text-indigo-700 px-4 py-2 rounded-md hover:bg-gray-100"
+                                    onClick={() => navigate("/cart")}
+                                    className="flex items-center bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded-md hover:bg-[#6B3410] transition-colors"
                                 >
                                     <ShoppingCart className="mr-2" />
-                                    <span className="hidden md:inline">View Cart</span>
+                                    <span className="hidden md:inline">Cart</span>
                                 </button>
 
                                 <button
-                                    onClick={() => navigate("/orders")} // Adjust route if needed
-                                    className="flex items-center bg-white text-indigo-700 px-4 py-2 ml-4 rounded-md hover:bg-gray-100"
+                                    onClick={() => navigate("/orders")}
+                                    className="flex items-center bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded-md hover:bg-[#6B3410] transition-colors"
                                 >
                                     <ShoppingBasket className="mr-2" />
-                                    <span className="hidden md:inline">View Order</span>
+                                    <span className="hidden md:inline">Orders</span>
                                 </button>
-
                             </div>
+
                             {showDropdown && (
-                                <div className="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-md z-10">
+                                <div className="absolute right-0 mt-2 w-48 bg-[#F5DEB3] shadow-lg rounded-md z-10">
                                     <ul>
-                                        <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={() => navigate("/setup")}>Profile</li>
-                                        <li className="px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer" onClick={logout}>
+                                        <li className="px-4 py-2 text-[#4A2511] hover:bg-[#E6CCa3] cursor-pointer transition-colors"
+                                            onClick={() => navigate("/setup")}>Profile</li>
+                                        <li className="px-4 py-2 text-[#4A2511] hover:bg-[#E6CCa3] cursor-pointer transition-colors"
+                                            onClick={logout}>
                                             <LogOut className="mr-2 inline" /> Logout
                                         </li>
                                     </ul>
                                 </div>
                             )}
                         </div>
-
                     ) : (
                         <>
                             <button
-                                className="hover:bg-indigo-800 px-3 py-2 rounded"
+                                className="bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded-md hover:bg-[#6B3410] transition-colors"
                                 onClick={() => navigate("/login")}
                             >
                                 Login
                             </button>
                             <button
-                                className="bg-white text-indigo-700 px-4 py-2 rounded font-semibold"
+                                className="bg-[#F5DEB3] text-[#4A2511] px-4 py-2 rounded-md hover:bg-[#E6CCa3] transition-colors"
                                 onClick={() => navigate("/login")}
                             >
                                 Register
@@ -140,5 +98,5 @@ export default function Header() {
                 </nav>
             </div>
         </header>
-    )
+    );
 }

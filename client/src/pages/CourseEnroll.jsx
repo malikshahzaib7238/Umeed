@@ -57,7 +57,7 @@ const CourseEnrollmentPage = ({ course }) => {
 
   const renderPersonalInfoStep = () => (
     <form onSubmit={handlePersonalInfoSubmit} className="space-y-4">
-      <h2 className="text-2xl font-bold text-indigo-700 mb-4">Personal Information</h2>
+      <h2 className="text-2xl font-bold text-[#4A2511] mb-4">Personal Information</h2>
 
       <div className="mb-4">
         <label className="mb-2 flex items-center">
@@ -125,7 +125,7 @@ const CourseEnrollmentPage = ({ course }) => {
 
       <button
         type="submit"
-        className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center"
+        className="w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors flex items-center justify-center"
       >
         Continue to Payment
       </button>
@@ -134,7 +134,7 @@ const CourseEnrollmentPage = ({ course }) => {
 
   const renderPaymentStep = () => (
     <form onSubmit={verifyPayment} className="space-y-4">
-      <h2 className="text-2xl font-bold text-indigo-700 mb-4">Payment Verification</h2>
+      <h2 className="text-2xl font-bold text-[#4A2511] mb-4">Payment Verification</h2>
 
       <div className="bg-green-100 p-4 rounded-xl mb-4">
         <p className="text-green-700 flex items-center">
@@ -173,7 +173,7 @@ const CourseEnrollmentPage = ({ course }) => {
 
       <button
         type="submit"
-        className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center"
+        className="w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors flex items-center justify-center"
       >
         Verify Payment
       </button>
@@ -183,14 +183,14 @@ const CourseEnrollmentPage = ({ course }) => {
   const renderConfirmationStep = () => (
     <div className="text-center">
       <CheckCircle size={64} className="mx-auto text-green-600 mb-4" />
-      <h2 className="text-2xl font-bold text-indigo-700 mb-4">Enrollment Successful!</h2>
+      <h2 className="text-2xl font-bold text-[#4A2511] mb-4">Enrollment Successful!</h2>
       <p className="text-gray-600 mb-4">
         You have been successfully enrolled in the course.
         We'll send further details to your email.
       </p>
       <button
         onClick={() => window.location.href = '/courses'}
-        className="w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center"
+        className="w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors  flex items-center justify-center"
       >
         Back to Courses
       </button>
@@ -198,7 +198,7 @@ const CourseEnrollmentPage = ({ course }) => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">

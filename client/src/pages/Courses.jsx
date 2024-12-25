@@ -3,13 +3,9 @@ import {
   Search,
   Filter,
   BookOpen,
-  Star,
   DollarSign,
   Clock,
-  User,
-  Book,
-  Bookmark,
-  Zap
+  User
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
@@ -97,7 +93,7 @@ const CoursesPage = () => {
       className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition group"
     >
       <div className="flex justify-between items-start mb-4">
-        <h3 className="font-bold text-xl text-indigo-700 group-hover:text-indigo-900 transition">
+        <h3 className="font-bold text-xl text-[#4A2511] group-hover:text-indigo-900 transition">
           {course.title}
         </h3>
         
@@ -115,7 +111,7 @@ const CoursesPage = () => {
           <span className="text-sm">{course.duration}</span>
         </div>
         <div className="flex items-center space-x-2">
-          <DollarSign size={16} className="text-blue-600" />
+          <DollarSign size={16} className="text-[#4A2511]" />
           <span className="text-sm">{course.price} PKR</span>
         </div>
         
@@ -130,7 +126,7 @@ const CoursesPage = () => {
         </span>
       </div>
 
-      <button className="mt-4 w-full bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 transition flex items-center justify-center">
+      <button className="mt-4 w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors flex items-center justify-center">
         <BookOpen size={16} className="mr-2" onClick={()=>navigate("/enroll")} />
         Enroll Now
       </button>
@@ -138,7 +134,7 @@ const CoursesPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 font-noto-nastaliq relative">
+    <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
 
       <Header/>
       <div className="grid md:grid-cols-4 gap-6 py-12 px-4">

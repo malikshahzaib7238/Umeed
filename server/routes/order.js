@@ -32,7 +32,28 @@ router.post("/", upload.none(), async (req, res) => {
     res.status(500).json({ error: "Failed to save the order" });
   }
 });
+router.delete("/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { userId } = req.query;
 
+    if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+    }
+
+    // Find and delete the order, ensuring it belongs to the correct user
+    const deletedOrder = await Order.findOneAndDelete({ _id: orderId, userId });
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: "Order not found or unauthorized" });
+    }
+
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting order:", error);
+    res.status(500).json({ error: "Failed to delete order" });
+  }
+});
 // GET: Fetch all orders
 router.get("/", async (req, res) => {
 

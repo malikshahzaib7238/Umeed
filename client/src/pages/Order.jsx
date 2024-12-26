@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
 
-import { DollarSign, ShoppingCart, Calendar } from 'lucide-react';
+import { DollarSign, ShoppingCart, Calendar, Trash2 } from 'lucide-react';
 import { useAuth } from "../contexts/AuthContext"; // Import useAuth
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const { id: userId } = useAuth(); // Get userId from AuthContext
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const placeholderImage = 'https://s3-alpha-sig.figma.com/img/a25d/266a/dc3c77058f886344ea0e6d70f086a23e?Expires=1734912000&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=AnmkLf5rwu4a-PaaQD0dni3iadBWjtzspkWzaNdzbDCJtB-dKcUmMRo53BXKa0d81jJK5h5EwIlxaIB-7EVkuUrwyhuQ0mdjiiAoAaD~jPh6A44NDyJNFDSf0rjOcLTLH1Uke2K7zyep2FhduKmeuLdtkGbZknSDTSZ1FjhJq-yrdkE2AwR~WmhvmGsUypn-Botj7dw0z5UYRU386NPdONesgLgg6QQrvNVtW6qJbUlxNNFVQrHy6Gy1F-FFE5iTBgHKKrBC9h35a4kE9M5s50yr9ShCUrGDaTCEE2~-HalSQhkTJvpnUh3E6~K1oWT3xDK2uTh-HrWI1-W-R1sgxQ__'; // Dummy image URL
 
-  // Fetch Orders from DB 
+  // Fetch Orders from DB
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -46,14 +47,42 @@ const Order = () => {
     fetchOrders();
   }, []);
 
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm('Are you sure you want to delete this order?')) {
+      return;
+    }
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(
+        `http://localhost:8080/order/${orderId}?userId=${userId}`,
+        {
+          method: 'DELETE',
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error('Failed to delete order');
+      }
+
+      // Update the orders state by removing the deleted order
+      setOrders(orders.filter(order => order._id !== orderId));
+    } catch (error) {
+      console.error('Error deleting order:', error);
+      alert('Failed to delete order. Please try again.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
       <Header />
 
       {/* Title */}
       <div className="container mx-auto py-8 px-4 text-center">
-        <h2 className="text-3xl font-bold  mb-6">
-         Your Orders
+        <h2 className="text-3xl font-bold mb-6">
+          Your Orders
         </h2>
       </div>
 
@@ -67,15 +96,25 @@ const Order = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {orders.map((order, index) => (
               <div
-                key={index}
+                key={order._id || index}
                 className="bg-white rounded-xl shadow-md p-6"
               >
                 {/* Order Header */}
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-[#4A2511]">
-                    Order #{order.id || index + 1}
+                    Order #{order._id || index + 1}
                   </h2>
-                  <ShoppingCart size={20} className="text-[#4A2511]" />
+                  <div className="flex items-center space-x-2">
+                    <ShoppingCart size={20} className="text-[#4A2511]" />
+                    <button
+                      onClick={() => handleDeleteOrder(order._id)}
+                      disabled={isDeleting}
+                      className="text-red-500 hover:text-red-700 transition-colors disabled:opacity-50"
+                      title="Delete Order"
+                    >
+                      <Trash2 size={20} />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Date & Time of the Order */}

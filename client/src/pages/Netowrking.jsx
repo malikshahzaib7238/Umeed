@@ -39,17 +39,7 @@ const NetworkingPage = () => {
         console.log(fetchedData);
         // Combine with initial simulated data if needed
         const combinedData = [
-          {
-            id: 1,
-            name: "Fatima Ahmed",
-            role: "Textile Export Entrepreneur",
-            location: "Karachi, Sindh",
-            expertise: ["Export Marketing", "Textile Design"],
-            mentorAvailable: true,
-            connections: 42,
-            verifiedSkills: ["International Trade", "Product Development"]
-          },
-          // Add other initial data if needed
+         
           ...fetchedData
         ];
 

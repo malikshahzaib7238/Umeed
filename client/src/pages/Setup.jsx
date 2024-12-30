@@ -22,7 +22,7 @@ const ProfileSetupPage = () => {
   const { id } = useAuth();
 
   const [skillInput, setSkillInput] = useState("");
-  const [setIsSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;

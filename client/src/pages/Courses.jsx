@@ -126,8 +126,9 @@ const CoursesPage = () => {
         </span>
       </div>
 
-      <button className="mt-4 w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors flex items-center justify-center">
-        <BookOpen size={16} className="mr-2" onClick={()=>navigate("/enroll")} />
+      <button className="mt-4 w-full bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors flex items-center justify-center"
+      onClick={()=>navigate("/enroll")}>
+        <BookOpen size={16} className="mr-2"  />
         Enroll Now
       </button>
     </div>

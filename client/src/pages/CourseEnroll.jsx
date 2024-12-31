@@ -9,6 +9,7 @@ import {
   CheckCircle,
   DollarSign
 } from 'lucide-react';
+import Header from '../components/Header';
 
 const CourseEnrollmentPage = ({ course }) => {
   const [step, setStep] = useState(1);
@@ -199,19 +200,20 @@ const CourseEnrollmentPage = ({ course }) => {
 
   return (
     <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
-      <header className="bg-indigo-700 text-white p-6 shadow-md">
+      {/* <header className="bg-indigo-700 text-white p-6 shadow-md">
         <div className="container mx-auto">
           <h1 className="text-2xl font-bold flex items-center">
             <Book className="mr-3" /> امید | Course Enrollment
           </h1>
         </div>
-      </header>
+      </header> */}
 
+      <Header/>
       <div className="grid md:grid-cols-4 gap-6 py-12 px-4">
         {/* Sidebar with Course Details */}
         <div className="bg-white p-6 rounded-xl shadow-md">
-          <h2 className="font-bold text-xl mb-4 flex items-center">
-            <CreditCard size={20} className="mr-2" /> Course Details
+          <h2 className="font-bold text-red-600-xl mb-4 flex items-center">
+            <CreditCard size={20} className="mr-2 text-red-500" /> Course Details
           </h2>
 
           <div className="space-y-3">

@@ -19,8 +19,10 @@ export default function Header() {
             "/cart": { icon: ShoppingCart, text: "امید | Your Cart" },
             "/setup": { icon: User, text: "امید | Profile Setup" },
             "/checkout": { icon: CreditCard, text: "امید | Checkout" },
-            "/orders": { icon: ShoppingBasket, text: "امید | Your Orders" }
+            "/orders": { icon: ShoppingBasket, text: "امید | Your Orders" },
+            "/enroll": { icon: Book, text: "امید | Course Enrollment" }
         };
+       
 
         const route = titles[location.pathname];
         if (!route) return null;

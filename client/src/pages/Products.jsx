@@ -100,7 +100,7 @@ const ProductsPage = () => {
           {/* <span>{product.rating}/5</span> */}
         </div>
         <div className="flex space-x-2">
-          <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full text-xs">
+          <span className="bg-red-200 text-red-700 px-2 py-1 rounded-full text-xs">
             {product.category}
           </span>
         </div>
@@ -181,6 +181,7 @@ const ProductsPage = () => {
               >
                 <option value="rating">Highest Rating</option>
                 <option value="price">Price: Low to High</option>
+                
               </select>
             </div>
           </div>

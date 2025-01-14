@@ -22,18 +22,6 @@ const CartPage = () => {
     const shippingCost = subtotal > 5000 ? 0 : 250;
     const total = subtotal + shippingCost - discount;
 
-    // const applyPromoCode = () => {
-    //     const validPromoCode = 'UMEED10';
-    //     if (promoCode === validPromoCode) {
-    //         const promoDiscount = subtotal * 0.1;
-    //         setDiscount(promoDiscount);
-    //         setCartTotal(total - discount);
-    //         setPromoMessage(`Promo code applied! You saved ${promoDiscount} PKR.`);
-    //     } else {
-    //         setDiscount(0);
-    //         setPromoMessage('Invalid promo code. Please try again.');
-    //     }
-    // };
 
     return (
         <div className="min-h-screen bg-[#F5DEB3] bg-opacity-30 font-noto-nastaliq">
@@ -121,33 +109,6 @@ const CartPage = () => {
                                 <span>{total} PKR</span>
                             </div>
 
-                            {/* Promo Code Section */}
-                            {/* <div className="mt-4">
-                                <label className="block mb-2 text-[#4A2511]">Promo Code</label>
-                                <div className="flex space-x-2">
-                                    <input
-                                        type="text"
-                                        placeholder="Enter promo code"
-                                        value={promoCode}
-                                        onChange={(e) => setPromoCode(e.target.value)}
-                                        className="flex-grow p-2 border border-[#8B4513] rounded bg-white/80"
-                                    />
-                                    <button
-                                        onClick={applyPromoCode}
-                                        className="bg-[#8B4513] text-[#F5DEB3] px-4 py-2 rounded hover:bg-[#6B3410] transition-colors"
-                                    >
-                                        Apply
-                                    </button>
-                                </div>
-                                <p className="text-xs text-[#6B3410] mt-1">
-                                    Hint: Try 'UMEED10' for 10% off
-                                </p>
-                                {promoMessage && (
-                                    <p className={`mt-2 text-xs ${discount > 0 ? 'text-green-700' : 'text-red-600'}`}>
-                                        {promoMessage}
-                                    </p>
-                                )}
-                            </div> */}
 
                             {/* Checkout Button */}
                             <button

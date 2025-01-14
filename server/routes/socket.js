@@ -1,8 +1,6 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-const mongoose = require('mongoose');
-const cors = require('cors');
 
 const app = express();
 const server = http.createServer(app);
@@ -12,34 +10,6 @@ const io = socketIo(server, {
     methods: ["GET", "POST"]
   }
 });
-
-// Message Schema
-const MessageSchema = new mongoose.Schema({
-  sender: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  receiver: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  content: {
-    type: String,
-    required: true
-  },
-  timestamp: {
-    type: Date,
-    default: Date.now
-  },
-  read: {
-    type: Boolean,
-    default: false
-  }
-});
-
-const Message = mongoose.model('Message', MessageSchema);
 
 // Socket.IO Connection Handler
 io.on('connection', (socket) => {
@@ -99,11 +69,6 @@ io.on('connection', (socket) => {
   });
 });
 
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/networkapp', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-});
 
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {

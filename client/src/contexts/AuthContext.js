@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import axios from '../utils/axios'
-// import { set } from '../../../server/utils/app'
 
-// init context
 const AuthContext = createContext()
 
 // export the consumer
